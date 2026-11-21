@@ -1,0 +1,16 @@
+flowchart TD
+    F1["1. Comprensión del Negocio<br/>Objetivo: calidad visual (3 clases) + tamaño relativo<br/>Restricciones éticas (PI1) e impactos (PI2)"]
+    F2["2. Comprensión de los Datos<br/>307 fotos propias (6 especies) + FruitNet Kaggle<br/>EDA: desbalanceo de Regular, resoluciones y fondos"]
+    F3["3. Preparación de los Datos<br/>Limpieza EXIF, Lanczos <=1024px, deduplicación SHA-256<br/>Segmentación CIELAB+Watershed en Mixed (84 recortes Regular)<br/>Agrupación dHash + StratifiedGroupKFold (621 / 156 / 194)"]
+    F4A["4A. Modelado Clásico<br/>Features: HSV + CIELAB + manchas + textura + HOG<br/>Dummy + SVM + Random Forest + XGBoost (GridSearchCV)"]
+    F4B["4B. Modelado Deep Learning<br/>Data Augmentation + Cross-Entropy ponderada<br/>CNN simple desde cero vs. MobileNetV2 congelada"]
+    F4C["4C. Estimación de Tamaño<br/>Segmentación Lab+HSV+Otsu<br/>Diámetro normalizado max(bw,bh)/max(W,H)"]
+    F5["5. Evaluación<br/>Selección estricta por Val Macro-F1<br/>Prueba reservada única, overfitting, errores y 204 refs de tamaño"]
+    F6["6. Despliegue<br/>App Streamlit offline (carga + cámara)<br/>Calidad + probabilidades + tamaño + máscara + latencia"]
+
+    F1 --> F2 --> F3
+    F3 --> F4A --> F5
+    F3 --> F4B --> F5
+    F3 --> F4C --> F5
+    F5 -->|"Modelo ganador + métricas"| F6
+    F5 -.->|"Ajustes documentados en nueva iteración"| F3

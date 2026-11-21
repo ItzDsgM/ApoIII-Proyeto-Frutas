@@ -1,0 +1,26 @@
+# Procesamiento numérico y tabular
+numpy>=1.26
+pandas>=2.2
+
+# Visión por computadora e imágenes
+Pillow>=10.4
+opencv-python-headless>=4.10
+
+# Machine Learning tradicional
+scikit-learn>=1.5
+xgboost>=2.1
+joblib>=1.4
+
+# Deep Learning (instalar con rueda CPU si no hay GPU NVIDIA)
+torch>=2.5
+torchvision>=0.20
+
+# Visualización y cuadernos
+matplotlib>=3.9
+seaborn>=0.13
+jupyter>=1
+ipykernel>=6.29
+
+# Despliegue y pruebas
+streamlit>=1.40
+pytest>=8.3

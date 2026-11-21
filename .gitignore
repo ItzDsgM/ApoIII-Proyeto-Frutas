@@ -1,0 +1,28 @@
+# Entornos virtuales y cachés de Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Datos externos pesados (Kaggle FruitNet no se sube a GitHub)
+data/external/**
+!data/external/.gitkeep
+
+# Carpetas temporales de revisión / descarte
+data/mixed_staging/**
+data/own_photos/**/Descartar/**
+
+# Archivos temporales y del sistema
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+.env
+.env.*
