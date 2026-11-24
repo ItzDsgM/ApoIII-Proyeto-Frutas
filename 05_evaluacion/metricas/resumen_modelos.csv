@@ -1,0 +1,8 @@
+model,family,train_macro_f1,val_macro_f1,test_macro_f1,test_balanced_accuracy,test_accuracy,overfitting_gap_train_minus_test,train_time_sec,inference_ms_per_img,model_size_mb
+MobileNetV2 (Transfer),deep_learning,0.9466,0.9013,0.9382,0.9322,0.9433,0.0084,352.355,35.44,9.34
+CNN simple (desde cero),deep_learning,0.8021,0.8342,0.8013,0.8389,0.8351,0.0008,220.699,30.13,0.398
+XGBoost (Clásico),ml_clasico,1.0,0.798,0.7927,0.7644,0.8557,0.2073,78.907,28.56,0.156
+SVM (Clásico),ml_clasico,0.9988,0.7757,0.7687,0.7452,0.8299,0.2301,7.743,29.05,0.862
+Random Forest (Clásico),ml_clasico,0.9988,0.765,0.7374,0.7042,0.8093,0.2614,12.389,70.41,1.326
+Baseline (Estratificada),baseline,0.3666,0.3385,0.2484,0.2529,0.3402,0.1182,0.0,0.1,0.0
+Baseline (Mayoritaria),baseline,0.2072,0.2065,0.2064,0.3333,0.4485,0.0008,0.008,0.1,0.0
