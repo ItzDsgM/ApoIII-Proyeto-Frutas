@@ -4,11 +4,12 @@ Proyecto Final — **Algoritmos y Programación III** (Semestre 2026-2)
 Facultad de Ingeniería, Diseño y Ciencias Aplicadas · Ingeniería de Sistemas · **Universidad Icesi**
 
 ### Integrantes del equipo
-| # | Nombre completo | Código institucional | Correo institucional |
-|---|---|---|---|
-| 1 | `[COMPLETAR NOMBRE INTEGRANTE 1]` | `[CÓDIGO 1]` | `[correo1@u.icesi.edu.co]` |
-| 2 | `[COMPLETAR NOMBRE INTEGRANTE 2]` | `[CÓDIGO 2]` | `[correo2@u.icesi.edu.co]` |
-| 3 | `[COMPLETAR NOMBRE INTEGRANTE 3]` | `[CÓDIGO 3]` | `[correo3@u.icesi.edu.co]` |
+| # | Nombre completo | Código institucional |
+|---|---|---|
+| 1 | `Paula Andrea Ferreira` | `A00403846` |
+| 2 | `Luis Eduardo Grijalba` | `A00407796` |
+| 3 | `Anderson Olave Ibargüen` | `A00408142` |
+| 4 | `Emanuel Murillo Herrera` | `A00405783` |
 
 Sistema automático basado en visión por computadora para clasificar frutas individuales en **3 categorías de calidad visual** (`Buena`, `Regular`, `Mala`) y estimar su **tamaño relativo** (diámetro normalizado invariante a orientación y categoría `Pequeño / Mediano / Grande`), desarrollado bajo la metodología **CRISP-DM**.
 

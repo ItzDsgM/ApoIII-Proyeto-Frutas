@@ -67,3 +67,25 @@ def test_streamlit_inspection_without_model_preserves_size(tmp_path: Path) -> No
     assert metrics.get("Puntuación del modelo") == "N/A"
     assert metrics.get("Tamaño relativo") not in (None, "No estimado")
     assert any("No se encontró un modelo" in x.value for x in app.warning)
+
+
+def test_streamlit_inspection_flow_with_roi_viewfinder() -> None:
+    """Verifica el flujo completo con visor puntual ROI activo en ``inspect_fruit_image``."""
+    code = (
+        "import importlib.util, sys\n"
+        f"sys.path.insert(0, {str(PROJECT_ROOT)!r})\n"
+        "from PIL import Image, ImageDraw\n"
+        f"spec = importlib.util.spec_from_file_location('app_mod', {str(PROJECT_ROOT / '06_despliegue/app.py')!r})\n"
+        "mod = importlib.util.module_from_spec(spec)\n"
+        "spec.loader.exec_module(mod)\n"
+        "im = Image.new('RGB', (400, 240), (235, 235, 235))\n"
+        "draw = ImageDraw.Draw(im)\n"
+        "draw.rectangle((270, 15, 385, 230), fill=(140, 80, 35))\n"
+        "draw.ellipse((90, 60, 210, 180), fill=(235, 190, 25))\n"
+        "mod.inspect_fruit_image(im, selected_species='naranja', roi_params=(38.0, 50.0, 48.0, 75.0))\n"
+    )
+    app = AppTest.from_string(code, default_timeout=45).run()
+    assert len(app.exception) == 0
+    metrics = {m.label: m.value for m in app.metric}
+    assert "Calidad visual" in metrics
+    assert metrics.get("Tamaño relativo") not in (None, "No estimado")

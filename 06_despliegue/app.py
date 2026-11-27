@@ -34,7 +34,14 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.config import DIR_METRICAS, DIR_MODELOS, QUALITY_CLASSES, QUALITY_DEFINITIONS
 from src.features import extract_classical_features_rgb
 from src.models_dl import load_dl_checkpoint, predict_single_pil
-from src.size_estimation import crop_fruit_foreground, estimate_fruit_size
+from src.size_estimation import (
+    compute_roi_bounds_pct,
+    compute_roi_xyxy,
+    crop_bbox_with_padding,
+    crop_fruit_foreground,
+    estimate_fruit_size,
+    estimate_fruit_size_in_roi,
+)
 
 SPECIES_OPTIONS = (
     "Automática / otra",
@@ -125,12 +132,19 @@ def load_deployed_model(models_dir: Path = DIR_MODELOS) -> dict[str, Any] | None
     }
 
 
-def predict_quality(image_pil: Image.Image, bundle: dict[str, Any]) -> tuple[str, dict[str, float]]:
+def predict_quality(
+    image_pil: Image.Image,
+    bundle: dict[str, Any],
+    *,
+    use_foreground_crop: bool = True,
+) -> tuple[str, dict[str, float]]:
     """Ejecuta inferencia de calidad sobre una imagen RGB ya orientada."""
     if bundle["family"] == "deep_learning":
-        # Igual que en la evaluación: primero recortar y luego reducir el lado mayor.
-        cropped, _ = crop_fruit_foreground(np.asarray(image_pil.convert("RGB")))
-        prepared = Image.fromarray(cropped)
+        # Igual que en la evaluación: recortar (si aún no viene recortada del ROI) y reducir el lado mayor.
+        prepared = image_pil.convert("RGB")
+        if use_foreground_crop:
+            cropped, _ = crop_fruit_foreground(np.asarray(prepared))
+            prepared = Image.fromarray(cropped)
         prepared.thumbnail((256, 256), Image.Resampling.LANCZOS)
         return predict_single_pil(
             bundle["model"],
@@ -141,7 +155,7 @@ def predict_quality(image_pil: Image.Image, bundle: dict[str, Any]) -> tuple[str
         )
 
     rgb = np.asarray(image_pil.convert("RGB"))
-    features = extract_classical_features_rgb(rgb, use_foreground_crop=True).reshape(1, -1)
+    features = extract_classical_features_rgb(rgb, use_foreground_crop=use_foreground_crop).reshape(1, -1)
     est = bundle["estimator"]
     if hasattr(est, "predict_proba"):
         probs = est.predict_proba(features)[0]
@@ -152,15 +166,100 @@ def predict_quality(image_pil: Image.Image, bundle: dict[str, Any]) -> tuple[str
     return QUALITY_CLASSES[pred_idx], {cls: float(probs[i]) for i, cls in enumerate(QUALITY_CLASSES)}
 
 
-def draw_bbox_overlay(image_rgb: np.ndarray, bbox_xyxy: tuple[int, int, int, int], mask: np.ndarray) -> np.ndarray:
-    """Superpone la caja delimitadora y un tinte sutil sobre la máscara detectada."""
+def draw_roi_preview(image_rgb: np.ndarray, roi_xyxy: tuple[int, int, int, int]) -> np.ndarray:
+    """Oscurece suavemente el área exterior al visor ROI y dibuja guías de enfoque."""
+    preview = (image_rgb.astype(np.float32) * 0.52).astype(np.uint8)
+    x1, y1, x2, y2 = roi_xyxy
+    preview[y1:y2, x1:x2] = image_rgb[y1:y2, x1:x2]
+
+    cyan = (0, 225, 255)
+    thickness = max(2, min(preview.shape[:2]) // 220)
+    cv2.rectangle(preview, (x1, y1), (x2, y2), cyan, thickness)
+
+    # Esquinas tipo visor de cámara
+    corner = max(12, min(x2 - x1, y2 - y1) // 7)
+    bracket_t = thickness + 2
+    cv2.line(preview, (x1, y1), (x1 + corner, y1), cyan, bracket_t)
+    cv2.line(preview, (x1, y1), (x1, y1 + corner), cyan, bracket_t)
+    cv2.line(preview, (x2, y1), (x2 - corner, y1), cyan, bracket_t)
+    cv2.line(preview, (x2, y1), (x2, y1 + corner), cyan, bracket_t)
+    cv2.line(preview, (x1, y2), (x1 + corner, y2), cyan, bracket_t)
+    cv2.line(preview, (x1, y2), (x1, y2 - corner), cyan, bracket_t)
+    cv2.line(preview, (x2, y2), (x2 - corner, y2), cyan, bracket_t)
+    cv2.line(preview, (x2, y2), (x2, y2 - corner), cyan, bracket_t)
+
+    # Cruz sutil en el centro del visor
+    cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
+    cross = max(6, corner // 3)
+    cv2.line(preview, (cx - cross, cy), (cx + cross, cy), cyan, max(1, thickness - 1))
+    cv2.line(preview, (cx, cy - cross), (cx, cy + cross), cyan, max(1, thickness - 1))
+    return preview
+
+
+def inject_camera_roi_overlay_css(roi_bounds_pct: tuple[float, float, float, float]) -> None:
+    """Superpone la guía visual del visor ROI sobre la vista previa en vivo de la cámara."""
+    left_pct, top_pct, width_pct, height_pct = roi_bounds_pct
+    cx_pct = left_pct + width_pct / 2.0
+    cy_pct = top_pct + height_pct / 2.0
+    st.markdown(
+        f"""
+        <style>
+        [data-testid="stCameraInputWebcamStyledBox"]:not([hidden]) {{
+            position: relative !important;
+            overflow: hidden !important;
+        }}
+        [data-testid="stCameraInputWebcamStyledBox"]:not([hidden])::after {{
+            content: "";
+            position: absolute;
+            left: {left_pct:.2f}%;
+            top: {top_pct:.2f}%;
+            width: {width_pct:.2f}%;
+            height: {height_pct:.2f}%;
+            border: 2.5px dashed #00e5ff;
+            border-radius: 10px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.42);
+            pointer-events: none;
+            box-sizing: border-box;
+            z-index: 10;
+        }}
+        [data-testid="stCameraInputWebcamStyledBox"]:not([hidden])::before {{
+            content: "";
+            position: absolute;
+            left: {cx_pct:.2f}%;
+            top: {cy_pct:.2f}%;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(0, 229, 255, 0.9);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-sizing: border-box;
+            z-index: 11;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def draw_bbox_overlay(
+    image_rgb: np.ndarray,
+    bbox_xyxy: tuple[int, int, int, int],
+    mask: np.ndarray,
+    *,
+    roi_xyxy: tuple[int, int, int, int] | None = None,
+) -> np.ndarray:
+    """Superpone la caja delimitadora, la máscara detectada y (opcionalmente) el marco ROI."""
     overlay = image_rgb.copy()
     tint = np.zeros_like(overlay)
     tint[:, :, 1] = 220
     fg = mask > 0
     overlay[fg] = (0.80 * overlay[fg] + 0.20 * tint[fg]).astype(np.uint8)
-    x1, y1, x2, y2 = bbox_xyxy
     thickness = max(2, min(overlay.shape[:2]) // 150)
+    if roi_xyxy is not None:
+        rx1, ry1, rx2, ry2 = roi_xyxy
+        cv2.rectangle(overlay, (rx1, ry1), (rx2, ry2), (0, 225, 255), max(1, thickness - 1))
+    x1, y1, x2, y2 = bbox_xyxy
     cv2.rectangle(overlay, (x1, y1), (x2, y2), (0, 210, 80), thickness)
     return overlay
 
@@ -169,6 +268,7 @@ def inspect_fruit_image(
     image: Image.Image,
     models_dir: Path = DIR_MODELOS,
     selected_species: str = "Automática / otra",
+    roi_params: tuple[float, float, float, float] | None = None,
 ) -> None:
     """Procesa y muestra en pantalla calidad visual, tamaño relativo y segmentación."""
     upright = ImageOps.exif_transpose(image).convert("RGB")
@@ -179,17 +279,51 @@ def inspect_fruit_image(
     t0 = time.perf_counter()
     bundle = load_deployed_model(models_dir)
 
+    roi_xyxy: tuple[int, int, int, int] | None = None
+    size_est = None
+    size_error: str | None = None
+    quality_crop_rgb: np.ndarray | None = None
+
+    if roi_params is not None:
+        cx_pct, cy_pct, w_pct, h_pct = roi_params
+        roi_xyxy = compute_roi_xyxy(
+            working.width,
+            working.height,
+            center_x_pct=cx_pct,
+            center_y_pct=cy_pct,
+            width_pct=w_pct,
+            height_pct=h_pct,
+        )
+        try:
+            size_est = estimate_fruit_size_in_roi(rgb, roi_xyxy)
+        except (ValueError, cv2.error) as exc:
+            size_error = str(exc)
+
+        if size_est is not None:
+            quality_crop_rgb = crop_bbox_with_padding(rgb, size_est.bbox_xyxy, pad_ratio=0.08)
+            quality_input = Image.fromarray(quality_crop_rgb)
+            use_fg_crop = False
+        else:
+            rx1, ry1, rx2, ry2 = roi_xyxy
+            quality_crop_rgb = rgb[ry1:ry2, rx1:rx2].copy()
+            quality_input = Image.fromarray(quality_crop_rgb)
+            use_fg_crop = True
+    else:
+        quality_input = working
+        use_fg_crop = True
+        try:
+            size_est = estimate_fruit_size(rgb)
+        except (ValueError, cv2.error) as exc:
+            size_error = str(exc)
+
     quality_label: str | None = None
     prob_map: dict[str, float] | None = None
     if bundle is not None:
-        quality_label, prob_map = predict_quality(working, bundle)
-
-    size_est = None
-    size_error: str | None = None
-    try:
-        size_est = estimate_fruit_size(rgb)
-    except (ValueError, cv2.error) as exc:
-        size_error = str(exc)
+        quality_label, prob_map = predict_quality(
+            quality_input,
+            bundle,
+            use_foreground_crop=use_fg_crop,
+        )
 
     latency_ms = (time.perf_counter() - t0) * 1000.0
 
@@ -232,13 +366,21 @@ def inspect_fruit_image(
             "Ejecuta `python 04_modelado/entrenar_modelos.py` para generarlo, o instala el checkpoint verificado del equipo."
         )
 
-    # --- Comparación visual: imagen original vs. segmentación de tamaño ---
+    # --- Comparación visual: imagen original / ROI vs. segmentación de tamaño ---
     img_col1, img_col2 = st.columns(2)
     with img_col1:
-        st.image(working, caption=f"Imagen analizada ({working.width} × {working.height} px)", width="stretch")
+        if roi_xyxy is not None:
+            left_img = draw_roi_preview(rgb, roi_xyxy)
+            rx1, ry1, rx2, ry2 = roi_xyxy
+            left_caption = (
+                f"Visor puntual ROI ({rx2 - rx1} × {ry2 - ry1} px dentro de {working.width} × {working.height} px)"
+            )
+            st.image(left_img, caption=left_caption, width="stretch")
+        else:
+            st.image(working, caption=f"Imagen analizada ({working.width} × {working.height} px)", width="stretch")
     with img_col2:
         if size_est is not None:
-            overlay = draw_bbox_overlay(rgb, size_est.bbox_xyxy, size_est.mask)
+            overlay = draw_bbox_overlay(rgb, size_est.bbox_xyxy, size_est.mask, roi_xyxy=roi_xyxy)
             st.image(
                 overlay,
                 caption=(
@@ -248,12 +390,27 @@ def inspect_fruit_image(
                 width="stretch",
             )
             if size_est.touches_border:
-                st.info(
-                    "Nota geométrica: el contorno toca el borde de la imagen; para mayor precisión "
-                    "de tamaño, encuadra el fruto completo con margen alrededor."
-                )
+                if roi_xyxy is not None:
+                    st.info(
+                        "Nota geométrica: el contorno toca el borde del visor ROI; amplía o desplaza "
+                        "el recuadro para dejar un margen limpio alrededor del fruto."
+                    )
+                else:
+                    st.info(
+                        "Nota geométrica: el contorno toca el borde de la imagen; para mayor precisión "
+                        "de tamaño, encuadra el fruto completo con margen alrededor."
+                    )
         else:
             st.warning(f"No se pudo segmentar el contorno del fruto: {size_error}")
+
+    if quality_crop_rgb is not None:
+        with st.expander("Ver recorte exacto enviado al clasificador de calidad", expanded=False):
+            ch, cw = quality_crop_rgb.shape[:2]
+            st.image(
+                quality_crop_rgb,
+                caption=f"Fruto aislado tras visor ROI + GrabCut ({cw} × {ch} px)",
+                width=280,
+            )
 
 
 def render() -> None:
@@ -324,9 +481,86 @@ def render() -> None:
         ("Cargar fotografía", "Capturar con cámara"),
         horizontal=True,
     )
+    is_camera_mode = source == "Capturar con cámara"
+    use_roi = st.toggle(
+        "Visor puntual (ROI)",
+        value=is_camera_mode,
+        key=f"roi_enabled_{source}",
+        help=(
+            "Activa una ventana de enfoque para aislar únicamente la fruta frente a fondos "
+            "complejos (mano, muebles, puerta o habitación) mediante segmentación GrabCut."
+        ),
+    )
+
+    roi_params: tuple[float, float, float, float] | None = None
+    if use_roi:
+        with st.container(border=True):
+            r1_col1, r1_col2, r1_col3, r1_col4 = st.columns(4)
+            with r1_col1:
+                cx_pct = float(
+                    st.slider(
+                        "Centro X (%)",
+                        min_value=10,
+                        max_value=90,
+                        value=50,
+                        step=1,
+                        key=f"roi_cx_{source}",
+                    )
+                )
+            with r1_col2:
+                cy_pct = float(
+                    st.slider(
+                        "Centro Y (%)",
+                        min_value=10,
+                        max_value=90,
+                        value=50,
+                        step=1,
+                        key=f"roi_cy_{source}",
+                    )
+                )
+            with r1_col3:
+                w_pct = float(
+                    st.slider(
+                        "Ancho visor (%)",
+                        min_value=20,
+                        max_value=100,
+                        value=45 if is_camera_mode else 60,
+                        step=1,
+                        key=f"roi_w_{source}",
+                    )
+                )
+            with r1_col4:
+                h_pct = float(
+                    st.slider(
+                        "Alto visor (%)",
+                        min_value=20,
+                        max_value=100,
+                        value=70 if is_camera_mode else 65,
+                        step=1,
+                        key=f"roi_h_{source}",
+                    )
+                )
+            roi_bounds_pct = compute_roi_bounds_pct(
+                center_x_pct=cx_pct,
+                center_y_pct=cy_pct,
+                width_pct=w_pct,
+                height_pct=h_pct,
+            )
+            roi_params = (cx_pct, cy_pct, w_pct, h_pct)
+            if is_camera_mode:
+                inject_camera_roi_overlay_css(roi_bounds_pct)
+                st.caption(
+                    "Ubica la fruta dentro del recuadro cian antes de tomar la foto "
+                    "(también puedes ajustar los controles después sin repetir la captura)."
+                )
+            else:
+                st.caption(
+                    "Ajusta el recuadro cian alrededor de la fruta para ignorar manos u objetos del fondo."
+                )
+
     uploaded = (
-        st.camera_input("Captura una sola fruta sobre fondo sencillo")
-        if source == "Capturar con cámara"
+        st.camera_input("Captura la fruta dentro del visor puntual" if use_roi else "Captura una sola fruta sobre fondo sencillo")
+        if is_camera_mode
         else st.file_uploader("Sube una imagen de una fruta individual", type=["jpg", "jpeg", "png", "webp"])
     )
 
@@ -334,7 +568,7 @@ def render() -> None:
         try:
             image = Image.open(uploaded)
             image.load()
-            inspect_fruit_image(image, selected_species=selected_species)
+            inspect_fruit_image(image, selected_species=selected_species, roi_params=roi_params)
         except (UnidentifiedImageError, OSError, ValueError):
             st.error("No se pudo leer el archivo como una imagen válida.")
 

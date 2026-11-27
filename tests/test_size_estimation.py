@@ -6,7 +6,12 @@ import cv2
 import numpy as np
 import pytest
 
-from src.size_estimation import classify_size_category, estimate_fruit_size
+from src.size_estimation import (
+    classify_size_category,
+    compute_roi_xyxy,
+    estimate_fruit_size,
+    estimate_fruit_size_in_roi,
+)
 
 
 def test_size_estimator_accuracy_and_rotation_invariance() -> None:
@@ -58,3 +63,20 @@ def test_own_size_annotations_are_complete_and_coherent() -> None:
         assert row["reference_size_category"] == expected_cat
     merged = own.merge(refs[["image_path", "reference_size_category"]], on="image_path")
     assert (merged["size_category"] == merged["reference_size_category"]).all()
+
+
+def test_roi_size_estimator_isolates_fruit_from_cluttered_background() -> None:
+    """El visor puntual ROI debe aislar la fruta e ignorar objetos grandes fuera del recuadro."""
+    scene = np.full((260, 460, 3), 235, dtype=np.uint8)
+    # Objeto distractor grande a la derecha (similar a una puerta de madera)
+    cv2.rectangle(scene, (310, 20), (440, 250), (145, 85, 35), -1)
+    # Fruta amarilla centrada en la zona izquierda/centro
+    cv2.circle(scene, (150, 130), 55, (230, 195, 25), -1)
+
+    roi_xyxy = compute_roi_xyxy(460, 260, center_x_pct=33.0, center_y_pct=50.0, width_pct=42.0, height_pct=75.0)
+    est = estimate_fruit_size_in_roi(scene, roi_xyxy)
+
+    # Diámetro esperado respecto a la imagen completa: ~110 / 460 ≈ 0.239
+    assert est.normalized_diameter == pytest.approx(110.0 / 460.0, abs=0.04)
+    assert est.bbox_xyxy[2] < 270
+    assert not est.touches_border

@@ -230,13 +230,238 @@ def crop_fruit_foreground(
     except (ValueError, cv2.error):
         return image_rgb, None
 
+    return crop_bbox_with_padding(image_rgb, est.bbox_xyxy, pad_ratio=pad_ratio), est
+
+
+def crop_bbox_with_padding(
+    image_rgb: np.ndarray,
+    bbox_xyxy: tuple[int, int, int, int],
+    *,
+    pad_ratio: float = 0.08,
+) -> np.ndarray:
+    """Recorta ``image_rgb`` alrededor de ``bbox_xyxy`` añadiendo margen proporcional."""
     h, w = image_rgb.shape[:2]
-    x1, y1, x2, y2 = est.bbox_xyxy
-    bw, bh = x2 - x1, y2 - y1
+    x1, y1, x2, y2 = bbox_xyxy
+    bw, bh = max(1, x2 - x1), max(1, y2 - y1)
     pad_x = int(round(bw * pad_ratio))
     pad_y = int(round(bh * pad_ratio))
     cx1 = max(0, x1 - pad_x)
     cy1 = max(0, y1 - pad_y)
     cx2 = min(w, x2 + pad_x)
     cy2 = min(h, y2 + pad_y)
-    return image_rgb[cy1:cy2, cx1:cx2].copy(), est
+    if cx2 <= cx1 or cy2 <= cy1:
+        return image_rgb.copy()
+    return image_rgb[cy1:cy2, cx1:cx2].copy()
+
+
+def compute_roi_bounds_pct(
+    center_x_pct: float = 50.0,
+    center_y_pct: float = 50.0,
+    width_pct: float = 45.0,
+    height_pct: float = 70.0,
+) -> tuple[float, float, float, float]:
+    """Devuelve ``(left_pct, top_pct, width_pct, height_pct)`` acotados en ``[0, 100]``."""
+    w_pct = float(np.clip(width_pct, 10.0, 100.0))
+    h_pct = float(np.clip(height_pct, 10.0, 100.0))
+    cx = float(np.clip(center_x_pct, 0.0, 100.0))
+    cy = float(np.clip(center_y_pct, 0.0, 100.0))
+
+    left = float(np.clip(cx - w_pct / 2.0, 0.0, 100.0 - w_pct))
+    top = float(np.clip(cy - h_pct / 2.0, 0.0, 100.0 - h_pct))
+    return left, top, w_pct, h_pct
+
+
+def compute_roi_xyxy(
+    width: int,
+    height: int,
+    *,
+    center_x_pct: float = 50.0,
+    center_y_pct: float = 50.0,
+    width_pct: float = 45.0,
+    height_pct: float = 70.0,
+    min_side_px: int = 32,
+) -> tuple[int, int, int, int]:
+    """Convierte parámetros porcentuales de visor ROI a coordenadas píxel ``(x1, y1, x2, y2)``."""
+    left_pct, top_pct, w_pct, h_pct = compute_roi_bounds_pct(
+        center_x_pct=center_x_pct,
+        center_y_pct=center_y_pct,
+        width_pct=width_pct,
+        height_pct=height_pct,
+    )
+    roi_w = max(min(width, min_side_px), int(round(width * (w_pct / 100.0))))
+    roi_h = max(min(height, min_side_px), int(round(height * (h_pct / 100.0))))
+    x1 = int(np.clip(int(round(width * (left_pct / 100.0))), 0, max(0, width - roi_w)))
+    y1 = int(np.clip(int(round(height * (top_pct / 100.0))), 0, max(0, height - roi_h)))
+    x2 = min(width, x1 + roi_w)
+    y2 = min(height, y1 + roi_h)
+    return x1, y1, x2, y2
+
+
+def estimate_fruit_size_in_roi(
+    image_rgb: np.ndarray,
+    roi_xyxy: tuple[int, int, int, int],
+    *,
+    max_working_side: int = 420,
+    thresholds: tuple[float, float] = DEFAULT_SIZE_THRESHOLDS,
+    grabcut_iters: int = 4,
+) -> SizeEstimate:
+    """Segmenta un fruto dentro de un visor ROI usando GrabCut con fondo fuera del recuadro.
+
+    El área exterior al visor ROI se modela como fondo definitivo (``GC_BGD``), permitiendo
+    aprender fondos heterogéneos (paredes, puertas, ropa, mano) mientras una elipse central
+    suave (``GC_PR_FGD``) guía la segmentación hacia la fruta encuadrada. Si GrabCut no
+    obtiene una máscara válida, recurre de forma segura a ``estimate_fruit_size`` sobre el
+    recorte del ROI.
+
+    Las métricas geométricas (``normalized_diameter``, ``diagonal_ratio``, ``area_ratio`` y
+    ``bbox_xyxy``) se expresan respecto a la imagen completa para evitar que encoger la
+    ventana ROI infle artificialmente el tamaño relativo estimado.
+    """
+    if image_rgb.ndim != 3 or image_rgb.shape[2] != 3 or image_rgb.dtype != np.uint8:
+        raise ValueError("Se requiere una imagen RGB uint8 de forma (H, W, 3).")
+
+    orig_h, orig_w = image_rgb.shape[:2]
+    if min(orig_h, orig_w) < 32:
+        raise ValueError("La imagen es demasiado pequeña para estimar el contorno del fruto.")
+
+    rx1 = int(np.clip(roi_xyxy[0], 0, orig_w - 1))
+    ry1 = int(np.clip(roi_xyxy[1], 0, orig_h - 1))
+    rx2 = int(np.clip(roi_xyxy[2], rx1 + 1, orig_w))
+    ry2 = int(np.clip(roi_xyxy[3], ry1 + 1, orig_h))
+    if (rx2 - rx1) < 24 or (ry2 - ry1) < 24:
+        raise ValueError("La ventana ROI es demasiado pequeña para segmentar la fruta.")
+
+    scale = 1.0
+    if max(orig_h, orig_w) > max_working_side:
+        scale = max_working_side / float(max(orig_h, orig_w))
+        work_w = max(32, int(round(orig_w * scale)))
+        work_h = max(32, int(round(orig_h * scale)))
+        work_rgb = cv2.resize(image_rgb, (work_w, work_h), interpolation=cv2.INTER_AREA)
+    else:
+        work_rgb = image_rgb
+        work_h, work_w = orig_h, orig_w
+
+    wx1 = max(0, min(work_w - 4, int(round(rx1 * scale))))
+    wy1 = max(0, min(work_h - 4, int(round(ry1 * scale))))
+    wx2 = max(wx1 + 4, min(work_w, int(round(rx2 * scale))))
+    wy2 = max(wy1 + 4, min(work_h, int(round(ry2 * scale))))
+
+    # Garantizar al menos un marco mínimo de fondo definitivo si el ROI cubre el 100 %
+    pad_b = 3 if min(work_w, work_h) >= 40 else 1
+    ix1, iy1 = max(pad_b, wx1), max(pad_b, wy1)
+    ix2, iy2 = min(work_w - pad_b, wx2), min(work_h - pad_b, wy2)
+    if (ix2 - ix1) < 8 or (iy2 - iy1) < 8:
+        ix1, iy1, ix2, iy2 = wx1, wy1, wx2, wy2
+
+    gc_mask = np.full((work_h, work_w), cv2.GC_BGD, dtype=np.uint8)
+    gc_mask[iy1:iy2, ix1:ix2] = cv2.GC_PR_BGD
+
+    cx, cy = (ix1 + ix2) // 2, (iy1 + iy2) // 2
+    ax = max(4, int(round((ix2 - ix1) * 0.36)))
+    ay = max(4, int(round((iy2 - iy1) * 0.36)))
+    cv2.ellipse(gc_mask, (cx, cy), (ax, ay), 0, 0, 360, int(cv2.GC_PR_FGD), -1)
+
+    full_mask: np.ndarray | None = None
+    has_bg = bool(np.any(gc_mask == cv2.GC_BGD))
+    has_fg = bool(np.any(gc_mask == cv2.GC_PR_FGD))
+
+    if has_bg and has_fg:
+        try:
+            bgd_model = np.zeros((1, 65), dtype=np.float64)
+            fgd_model = np.zeros((1, 65), dtype=np.float64)
+            work_bgr = cv2.cvtColor(work_rgb, cv2.COLOR_RGB2BGR)
+            cv2.grabCut(
+                work_bgr,
+                gc_mask,
+                None,
+                bgd_model,
+                fgd_model,
+                max(1, int(grabcut_iters)),
+                cv2.GC_INIT_WITH_MASK,
+            )
+            fg = np.where((gc_mask == cv2.GC_FGD) | (gc_mask == cv2.GC_PR_FGD), 1, 0).astype(np.uint8)
+            # Restringir estrictamente la máscara al interior del visor ROI
+            roi_clip = np.zeros_like(fg)
+            roi_clip[wy1:wy2, wx1:wx2] = 1
+            fg &= roi_clip
+
+            k_close = max(3, (int(round(min(wy2 - wy1, wx2 - wx1) * 0.03)) | 1))
+            k_open = max(3, (int(round(min(wy2 - wy1, wx2 - wx1) * 0.015)) | 1))
+            fg = cv2.morphologyEx(
+                fg, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k_close, k_close))
+            )
+            fg = cv2.morphologyEx(
+                fg, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (k_open, k_open))
+            )
+
+            num_cc, labels, stats, centroids = cv2.connectedComponentsWithStats(fg, connectivity=8)
+            roi_area = float(max(1, (wx2 - wx1) * (wy2 - wy1)))
+            roi_half_w = max(1.0, (wx2 - wx1) / 2.0)
+            roi_half_h = max(1.0, (wy2 - wy1) / 2.0)
+            best_id = -1
+            best_score = -1.0
+
+            for cc_id in range(1, num_cc):
+                area = float(stats[cc_id, cv2.CC_STAT_AREA])
+                area_frac_roi = area / roi_area
+                if area_frac_roi < 0.015 or area_frac_roi > 0.98:
+                    continue
+                dx = (centroids[cc_id][0] - cx) / roi_half_w
+                dy = (centroids[cc_id][1] - cy) / roi_half_h
+                center_weight = math.exp(-0.5 * ((dx**2 + dy**2) / (0.65**2)))
+                score = area_frac_roi * center_weight
+                if score > best_score:
+                    best_score = score
+                    best_id = cc_id
+
+            if best_id > 0:
+                comp = (labels == best_id).astype(np.uint8)
+                contours, _ = cv2.findContours(comp, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                filled = np.zeros_like(comp)
+                if contours:
+                    main_contour = max(contours, key=cv2.contourArea)
+                    cv2.drawContours(filled, [main_contour], -1, 1, cv2.FILLED)
+                if (work_w, work_h) != (orig_w, orig_h):
+                    full_mask = cv2.resize(filled, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST)
+                else:
+                    full_mask = filled
+        except cv2.error:
+            full_mask = None
+
+    # Respaldo determinista si GrabCut no aisló un objeto claro dentro del ROI
+    if full_mask is None or int(np.count_nonzero(full_mask)) == 0:
+        roi_crop = image_rgb[ry1:ry2, rx1:rx2]
+        local_est = estimate_fruit_size(roi_crop, thresholds=thresholds)
+        full_mask = np.zeros((orig_h, orig_w), dtype=np.uint8)
+        full_mask[ry1:ry2, rx1:rx2] = local_est.mask
+
+    ys, xs = np.nonzero(full_mask)
+    if len(xs) == 0:
+        raise ValueError("No se detectó un fruto claramente separado dentro del visor ROI.")
+
+    x1, x2 = int(xs.min()), int(xs.max()) + 1
+    y1, y2 = int(ys.min()), int(ys.max()) + 1
+    bw = x2 - x1
+    bh = y2 - y1
+
+    max_img_side = float(max(orig_w, orig_h))
+    diag_img = math.hypot(orig_w, orig_h)
+    normalized_diameter = float(max(bw, bh) / max_img_side)
+    diagonal_ratio = float(max(bw, bh) / diag_img)
+    mask_area = float(np.count_nonzero(full_mask))
+    area_ratio = float(mask_area / (orig_w * orig_h))
+    bbox_fill_ratio = float(mask_area / max(1, bw * bh))
+    touches_border = bool(
+        x1 <= rx1 + 2 or y1 <= ry1 + 2 or x2 >= rx2 - 2 or y2 >= ry2 - 2
+    )
+
+    return SizeEstimate(
+        normalized_diameter=normalized_diameter,
+        diagonal_ratio=diagonal_ratio,
+        area_ratio=area_ratio,
+        size_category=classify_size_category(normalized_diameter, thresholds=thresholds),
+        bbox_xyxy=(x1, y1, x2, y2),
+        bbox_fill_ratio=bbox_fill_ratio,
+        touches_border=touches_border,
+        mask=full_mask,
+    )
