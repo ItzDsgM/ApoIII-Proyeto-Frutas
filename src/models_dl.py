@@ -3,8 +3,10 @@
 Implementa las dos alternativas recomendadas en la sección 3 del enunciado:
 1. ``SimpleFruitCNN``: arquitectura convolucional liviana entrenada desde cero
    (3 bloques Conv-BatchNorm-ReLU-MaxPool + GlobalAvgPool + capas densas con Dropout).
-2. ``TransferMobileNetV2``: MobileNetV2 preentrenada en ImageNet con el extractor
-   congelado (incluyendo estadísticas BatchNorm en modo ``eval``) y cabeza densa propia.
+2. ``TransferMobileNetV2``: MobileNetV2 preentrenada en ImageNet (Sandler et al.,
+   CVPR 2018; pesos oficiales ``IMAGENET1K_V2`` de PyTorch/TorchVision, BSD-3) con
+   el extractor congelado (incluyendo estadísticas BatchNorm en modo ``eval``) y
+   cabeza densa propia.
 
 Ambos modelos:
 - Utilizan entropía cruzada ponderada por frecuencia inversa de clase

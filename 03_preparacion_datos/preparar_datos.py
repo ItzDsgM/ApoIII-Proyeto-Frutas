@@ -52,8 +52,10 @@ from src.config import (
     QUALITY_CLASSES,
 )
 from src.preprocessing import load_clean_rgb, save_clean_jpeg, sha256_file
+from src.size_estimation import classify_size_category
 
 MIXED_CROPS_DIR = DATA_DIR / "mixed_crops"
+SIZE_REFERENCES_CSV = ANNOTATIONS_DIR / "size_references.csv"
 
 OWN_CSV_FIELDS = [
     "image_path",
@@ -68,6 +70,8 @@ OWN_CSV_FIELDS = [
     "source",
     "group_id",
     "reviewer",
+    "reference_normalized_diameter",
+    "size_category",
 ]
 
 EXCLUDED_CSV_FIELDS = [
@@ -98,6 +102,28 @@ def _normalize_label(folder_name: str) -> str | None:
     return lookup.get(folder_name.strip().casefold())
 
 
+def _load_size_lookup() -> dict[str, tuple[str, str]]:
+    """Carga anotaciones de tamaño previas por ``image_path`` para preservarlas al regenerar CSV."""
+    size_lookup: dict[str, tuple[str, str]] = {}
+    if OWN_ANNOTATIONS_CSV.is_file():
+        with OWN_ANNOTATIONS_CSV.open(encoding="utf-8", newline="") as stream:
+            for row in csv.DictReader(stream):
+                diam = (row.get("reference_normalized_diameter") or "").strip()
+                cat = (row.get("size_category") or "").strip()
+                if diam:
+                    cat = cat or classify_size_category(float(diam))
+                    size_lookup[row["image_path"]] = (diam, cat)
+    if SIZE_REFERENCES_CSV.is_file():
+        with SIZE_REFERENCES_CSV.open(encoding="utf-8", newline="") as stream:
+            for row in csv.DictReader(stream):
+                diam = (row.get("reference_normalized_diameter") or "").strip()
+                cat = (row.get("reference_size_category") or "").strip()
+                if diam:
+                    cat = cat or classify_size_category(float(diam))
+                    size_lookup[row["image_path"]] = (diam, cat)
+    return size_lookup
+
+
 def process_own_photos(
     own_dir: Path = OWN_PHOTOS_DIR,
     *,
@@ -109,6 +135,7 @@ def process_own_photos(
     if not own_dir.is_dir():
         raise FileNotFoundError(f"No existe la carpeta de fotos propias: {own_dir}")
 
+    size_lookup = _load_size_lookup()
     seen_hashes: dict[str, str] = {}
     admitted_plan: list[dict[str, object]] = []
     excluded_rows: list[dict[str, object]] = []
@@ -186,6 +213,7 @@ def process_own_photos(
             img = load_clean_rgb(item["src_path"], max_side=max_side)
             w, h = img.size
             rel_target = item["target_path"].relative_to(PROJECT_ROOT).as_posix()
+            ref_diam, ref_cat = size_lookup.get(rel_target, ("", ""))
             own_rows.append(
                 {
                     "image_path": rel_target,
@@ -200,6 +228,8 @@ def process_own_photos(
                     "source": "Propia",
                     "group_id": f"own_{item['species']}_{item['original_sha256'][:12]}",
                     "reviewer": reviewer,
+                    "reference_normalized_diameter": ref_diam,
+                    "size_category": ref_cat,
                 }
             )
         return own_rows, excluded_rows
@@ -228,9 +258,11 @@ def process_own_photos(
             target_path.parent.mkdir(parents=True, exist_ok=True)
             shutil.move(str(tmp_file), str(target_path))
             final_sha = sha256_file(target_path)
+            rel_target = target_path.relative_to(PROJECT_ROOT).as_posix()
+            ref_diam, ref_cat = size_lookup.get(rel_target, ("", ""))
             own_rows.append(
                 {
-                    "image_path": target_path.relative_to(PROJECT_ROOT).as_posix(),
+                    "image_path": rel_target,
                     "species": item["species"],
                     "quality": item["quality"],
                     "width": item["width"],
@@ -242,6 +274,8 @@ def process_own_photos(
                     "source": "Propia",
                     "group_id": f"own_{item['species']}_{final_sha[:12]}",
                     "reviewer": reviewer,
+                    "reference_normalized_diameter": ref_diam,
+                    "size_category": ref_cat,
                 }
             )
 

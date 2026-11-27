@@ -5,7 +5,13 @@ Este módulo concentra las operaciones reproducibles de Fase 3 (Preparación de 
 - Limpieza completa de metadatos EXIF (privacidad - PI1) y redimensionado con Lanczos.
 - Segmentación clásica de instancias individuales en escenas multifruto
   (`Mixed Qualit_Fruits`) mediante distancia cromática en espacio CIELAB,
-  umbralización de Otsu y separación de frutos en contacto con Watershed (PI3).
+  umbralización automática de Otsu (1979) y separación de frutos en contacto con
+  Watershed (Meyer, 1994 / implementación OpenCV, Apache-2.0) (PI3).
+
+Referencias de terceros reutilizadas:
+- OpenCV (``cv2``) para transformaciones de color, morfología y Watershed.
+- Pillow (``PIL``) para orientación EXIF y remuestreo Lanczos.
+- Esquema estándar de hashing perceptual por diferencias horizontales (``dHash``).
 """
 
 from __future__ import annotations

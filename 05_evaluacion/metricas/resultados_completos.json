@@ -1799,37 +1799,99 @@
   "size_evaluation": {
     "formula": "max(bbox_width, bbox_height) / max(image_width, image_height)",
     "rotation_invariant": true,
-    "references_total": 204,
-    "references_evaluated": 204,
+    "references_total": 307,
+    "references_evaluated": 307,
     "references_failed": 0,
     "coverage_rate": 1.0,
-    "mae": 0.01244,
-    "median_ae": 0.00601,
-    "rmse": 0.01918,
+    "mae": 0.02222,
+    "median_ae": 0.00668,
+    "rmse": 0.0643,
+    "size_category_labels": [
+      "Pequeño",
+      "Mediano",
+      "Grande"
+    ],
+    "size_category_accuracy": 0.9283,
+    "size_category_macro_f1": 0.9311,
+    "size_category_confusion_matrix": [
+      [
+        155,
+        18,
+        3
+      ],
+      [
+        0,
+        84,
+        1
+      ],
+      [
+        0,
+        0,
+        46
+      ]
+    ],
+    "size_category_per_class": {
+      "Pequeño": {
+        "precision": 1.0,
+        "recall": 0.8807,
+        "f1": 0.9366,
+        "support": 176
+      },
+      "Mediano": {
+        "precision": 0.8235,
+        "recall": 0.9882,
+        "f1": 0.8984,
+        "support": 85
+      },
+      "Grande": {
+        "precision": 0.92,
+        "recall": 1.0,
+        "f1": 0.9583,
+        "support": 46
+      }
+    },
     "per_species": {
+      "banano": {
+        "n": 32,
+        "mae": 0.01126,
+        "median_ae": 0.00439,
+        "rmse": 0.01962,
+        "category_accuracy": 0.9688
+      },
       "limon": {
         "n": 45,
         "mae": 0.01723,
         "median_ae": 0.00955,
-        "rmse": 0.02411
+        "rmse": 0.02411,
+        "category_accuracy": 1.0
       },
       "mango": {
-        "n": 43,
-        "mae": 0.00841,
-        "median_ae": 0.00426,
-        "rmse": 0.01269
+        "n": 58,
+        "mae": 0.00755,
+        "median_ae": 0.00372,
+        "rmse": 0.01176,
+        "category_accuracy": 0.931
+      },
+      "manzana": {
+        "n": 29,
+        "mae": 0.06445,
+        "median_ae": 0.02539,
+        "rmse": 0.108,
+        "category_accuracy": 0.7931
       },
       "naranja": {
-        "n": 64,
-        "mae": 0.01569,
-        "median_ae": 0.00763,
-        "rmse": 0.0236
+        "n": 85,
+        "mae": 0.03294,
+        "median_ae": 0.00879,
+        "rmse": 0.101,
+        "category_accuracy": 0.8824
       },
       "tomate_arbol": {
-        "n": 52,
-        "mae": 0.00763,
-        "median_ae": 0.00464,
-        "rmse": 0.01103
+        "n": 58,
+        "mae": 0.01,
+        "median_ae": 0.00471,
+        "rmse": 0.01726,
+        "category_accuracy": 0.9828
       }
     },
     "combined_dataset_coverage": {

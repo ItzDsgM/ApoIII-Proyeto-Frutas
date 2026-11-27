@@ -10,8 +10,13 @@ Fundamento matemático (PI3):
 Se combina la distancia cromática ponderada en CIELAB frente al fondo de los bordes
 (``w_L = 0.30`` para atenuar sombras proyectadas) con el canal de saturación HSV
 cuando el fondo es neutro (blanco, gris claro o mesón gris oscuro), seguida de
-umbralización automática de Otsu, morfología matemática y selección ponderada por
+umbralización automática de Otsu (1979), morfología matemática y selección ponderada por
 centralidad para aislar el fruto principal incluso si aparecen bordes secundarios.
+
+Referencias de terceros reutilizadas:
+- OpenCV (``cv2``, Apache-2.0): conversiones de color, filtro gaussiano, umbralización
+  de Otsu, operadores morfológicos y componentes conexos.
+- NumPy (BSD-3): operaciones vectorizadas sobre máscaras y coordenadas.
 """
 
 from __future__ import annotations

@@ -17,7 +17,7 @@ Sea una imagen RGB orientada $I \in \{0, \dots, 255\}^{H \times W \times 3}$ de 
 $$\hat{y} = \arg\max_{c \in \{0, 1, 2\}} P_\theta(y = c \mid \phi(I))$$
 
 donde $\phi(I)$ corresponde a:
-- Un vector de características diseñadas $\mathbf{x} \in \mathbb{R}^{396}$ (histogramas HSV, momentos CIELAB, indicadores de anomalías oscuras locales, textura Sobel/Laplaciano y HOG) para los modelos clásicos (SVM, Random Forest, XGBoost), o
+- Un vector de características diseñadas $\mathbf{x} \in \mathbb{R}^{408}$ ($48$ histogramas HSV + $18$ momentos CIELAB + $6$ indicadores de manchas oscuras locales + $12$ textura Sobel/Laplaciano + $324$ HOG) para los modelos clásicos (SVM, Random Forest, XGBoost), o
 - Un tensor normalizado de píxeles tras recorte del primer plano para las arquitecturas convolucionales (CNN desde cero y MobileNetV2 congelada).
 
 Para compensar el desbalance entre clases se optimiza la **entropía cruzada ponderada**:

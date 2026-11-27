@@ -263,7 +263,7 @@ def plot_size_evaluation(
     sample_paths: list[tuple[str, Path]],
     fig_dir: Path,
 ) -> None:
-    """Gráfica 6: dispersión estimado vs. referencia (204 cajas) + distribución de error + máscaras."""
+    """Gráfica 6: dispersión estimado vs. referencia (307 cajas) + distribución de error + máscaras."""
     fig = plt.figure(figsize=(12, 7.5))
     gs = fig.add_gridspec(2, 4, height_ratios=[1.25, 1.0])
 

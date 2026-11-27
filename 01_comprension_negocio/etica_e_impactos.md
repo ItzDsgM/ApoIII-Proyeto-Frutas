@@ -10,7 +10,13 @@
 | **Confundir inspección visual con inocuidad alimentaria** (una fruta visualmente sana puede tener daño interno o contaminación invisible) | **1.2 Evitar el daño**; **2.5 Realizar evaluaciones exhaustivas de riesgos** | La interfaz y la documentación establecen explícitamente que la salida evalúa únicamente apariencia externa y requiere supervisión humana; nunca emite certificación sanitaria ni decisión automática de consumo. |
 | **Riesgo de fuga de datos y sobreestimación de resultados** | **1.3 Ser honesto y confiable**; **2.1 Esforzarse por lograr alta calidad** | Agrupación perceptual por `dHash` y `source_group_id` antes de `StratifiedGroupKFold`, separación estricta `train / val / test`, selección del modelo ganador exclusivamente con `val` y publicación de errores reales y brecha de sobreajuste. |
 
-## 2. Matriz de impactos globales, sociales, ambientales y económicos (PI2)
+## 2. Análisis inicial de impactos (Fase 1, ex-ante) — Matriz global, social, ambiental y económica (PI2)
+
+> **Alcance temporal:** Esta matriz recoge la evaluación **inicial (ex-ante)** realizada durante la Fase 1 bajo supuestos previos al entrenamiento. El **análisis final cuantificado (ex-post)**, contrastado con las métricas de prueba, latencia real en CPU, reducción de peso y errores observados por origen y especie, se encuentra documentado en [`05_evaluacion/impactos_finales_y_literatura.md`](../05_evaluacion/impactos_finales_y_literatura.md).
+
+### Supuestos operativos iniciales (ex-ante)
+- Se asumió que las fotos propias y las fuentes públicas (`FruitNet_Kaggle` + `Mixed Qualit_Fruits`) compartirían distribuciones suficientemente compatibles tras recorte de primer plano.
+- Se estableció como restricción de diseño operar exclusivamente en CPU estándar sin GPU dedicada ni transmisión de imágenes a servicios en la nube.
 
 | Dimensión | Impactos positivos potenciales | Riesgos o impactos negativos | Estrategias concretas de mitigación |
 |---|---|---|---|

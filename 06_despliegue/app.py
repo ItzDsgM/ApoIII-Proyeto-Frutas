@@ -4,7 +4,7 @@ Fase 6 CRISP-DM (Despliegue — Enunciado sec. 1.4):
 - Permite cargar una fotografía o capturarla en tiempo real con la cámara.
 - Estima la clase de calidad (``Buena``, ``Regular``, ``Mala``) junto con las
   probabilidades de salida del modelo ganador seleccionado en validación.
-- Estima el diámetro normalizado de la caja alineada ``max(bw, bh) / max(W, H)``,
+- Estima el diámetro normalizado invariante a rotación ``max(bw, bh) / max(W, H)``,
   su categoría relativa (``Pequeño``, ``Mediano``, ``Grande``) y muestra la máscara
   de segmentación para inspección transparente.
 
@@ -31,7 +31,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import DIR_MODELOS, QUALITY_CLASSES, QUALITY_DEFINITIONS
+from src.config import DIR_METRICAS, DIR_MODELOS, QUALITY_CLASSES, QUALITY_DEFINITIONS
 from src.features import extract_classical_features_rgb
 from src.models_dl import load_dl_checkpoint, predict_single_pil
 from src.size_estimation import crop_fruit_foreground, estimate_fruit_size
@@ -45,6 +45,55 @@ SPECIES_OPTIONS = (
     "naranja",
     "tomate_arbol",
 )
+
+# Notas de dominio transparentes derivadas de la auditoría por especie y origen
+SPECIES_DOMAIN_NOTES: dict[str, tuple[str, str]] = {
+    "tomate_arbol": (
+        "warning",
+        "Advertencia de dominio: el modelo solo observó ejemplares `Buena` de `tomate_arbol` en "
+        "entrenamiento/prueba (0 `Regular` y 0 `Mala` propios). Las predicciones de defecto en esta "
+        "especie dependen de transferencia visual desde otras frutas.",
+    ),
+    "manzana": (
+        "info",
+        "Nota de dominio: las fotos propias de `manzana` son solo `Buena`; los ejemplos `Mala` y "
+        "`Regular` provienen de Kaggle/Mixed. En fondos oscuros conviene validar visualmente golpes leves.",
+    ),
+    "mango": (
+        "info",
+        "Nota de dominio: `mango` no forma parte de Kaggle FruitNet; todas sus muestras son propias "
+        "(58 en total, 7 en prueba). Se sugiere inspección humana ante manchas limítrofes.",
+    ),
+    "banano": (
+        "info",
+        "Nota de dominio: en prueba sobre fotos propias se detectaron falsos positivos `Mala → Buena` "
+        "en bananos sobre fondo oscuro o con pardeamiento parcial. Verificar probabilidad.",
+    ),
+    "naranja": (
+        "info",
+        "Nota de dominio: los falsos positivos en `naranja` propia ocurrieron principalmente con daño "
+        "localizado sobre fondo neutro/oscuro. Si la confianza es < 75 %, revisar manualmente.",
+    ),
+    "limon": (
+        "info",
+        "Nota de dominio: especie presente en fotos propias, Kaggle y Mixed; verifica iluminación "
+        "uniforme para distinguir maduración normal de cicatrices superficiales.",
+    ),
+}
+
+LOW_CONFIDENCE_THRESHOLD = 0.75
+
+
+@st.cache_resource(show_spinner=False)
+def load_evaluation_summary(metrics_dir: Path = DIR_METRICAS) -> dict[str, Any] | None:
+    """Carga métricas de evaluación por especie para contextualizar la interfaz."""
+    report_path = metrics_dir / "resultados_completos.json"
+    if not report_path.is_file():
+        return None
+    try:
+        return json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
 
 
 @st.cache_resource(show_spinner=False)
@@ -116,7 +165,11 @@ def draw_bbox_overlay(image_rgb: np.ndarray, bbox_xyxy: tuple[int, int, int, int
     return overlay
 
 
-def inspect_fruit_image(image: Image.Image, models_dir: Path = DIR_MODELOS) -> None:
+def inspect_fruit_image(
+    image: Image.Image,
+    models_dir: Path = DIR_MODELOS,
+    selected_species: str = "Automática / otra",
+) -> None:
     """Procesa y muestra en pantalla calidad visual, tamaño relativo y segmentación."""
     upright = ImageOps.exif_transpose(image).convert("RGB")
     working = upright.copy()
@@ -156,6 +209,15 @@ def inspect_fruit_image(image: Image.Image, models_dir: Path = DIR_MODELOS) -> N
             st.metric("Tamaño relativo", "No estimado")
     with col4:
         st.metric("Latencia", f"{latency_ms:.0f} ms")
+
+    if prob_map is not None and quality_label is not None and prob_map[quality_label] < LOW_CONFIDENCE_THRESHOLD:
+        st.warning(
+            f"Confianza moderada/baja ({prob_map[quality_label]:.1%} < {LOW_CONFIDENCE_THRESHOLD:.0%}). "
+            "Según el protocolo *human-in-the-loop*, se recomienda revisión visual humana."
+        )
+
+    if selected_species != "Automática / otra":
+        st.caption(f"Especie seleccionada para referencia contextual: **{selected_species}**")
 
     # --- Distribución de puntuaciones por clase ---
     if prob_map is not None:
@@ -208,9 +270,10 @@ def render() -> None:
     )
 
     bundle = load_deployed_model()
+    eval_summary = load_evaluation_summary()
     with st.sidebar:
         st.header("Configuración e información")
-        st.selectbox("Especie de referencia (opcional)", SPECIES_OPTIONS)
+        selected_species = st.selectbox("Especie de referencia (opcional)", SPECIES_OPTIONS)
         if bundle is not None:
             meta = bundle["meta"]
             st.success(f"Modelo activo: **{meta['model_name']}**")
@@ -219,6 +282,33 @@ def render() -> None:
                 f"- **Exactitud prueba:** `{meta['test_accuracy']:.4f}`\n"
                 f"- **Tamaño en disco:** `{meta['artifact_size_mb']:.2f} MB`"
             )
+        if selected_species != "Automática / otra":
+            st.divider()
+            st.subheader(f"Referencia: `{selected_species}`")
+            if eval_summary is not None:
+                model_key = bundle["meta"]["model_name"] if bundle is not None else eval_summary.get("selected_model_by_val")
+                sp_quality = eval_summary.get("models", {}).get(model_key, {}).get("test_by_species", {}).get(selected_species)
+                sp_size = eval_summary.get("size_evaluation", {}).get("per_species", {}).get(selected_species)
+                lines: list[str] = []
+                if sp_quality:
+                    lines.append(
+                        f"- **Calidad (test, n={sp_quality['n']}):** Acc `{sp_quality['accuracy']:.2%}` | "
+                        f"Macro-F1 `{sp_quality['macro_f1_present_classes']:.4f}`"
+                    )
+                if sp_size:
+                    lines.append(
+                        f"- **Tamaño (refs, n={sp_size['n']}):** MAE `{sp_size['mae']:.4f}` | "
+                        f"Acc cat. `{sp_size.get('category_accuracy', 0.0):.2%}`"
+                    )
+                if lines:
+                    st.markdown("\n".join(lines))
+            note = SPECIES_DOMAIN_NOTES.get(selected_species)
+            if note is not None:
+                level, text = note
+                if level == "warning":
+                    st.warning(text)
+                else:
+                    st.info(text)
         st.divider()
         st.subheader("Criterios de calidad")
         for label, definition in QUALITY_DEFINITIONS.items():
@@ -244,7 +334,7 @@ def render() -> None:
         try:
             image = Image.open(uploaded)
             image.load()
-            inspect_fruit_image(image)
+            inspect_fruit_image(image, selected_species=selected_species)
         except (UnidentifiedImageError, OSError, ValueError):
             st.error("No se pudo leer el archivo como una imagen válida.")
 

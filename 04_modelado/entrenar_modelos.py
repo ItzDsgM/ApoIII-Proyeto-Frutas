@@ -9,7 +9,7 @@ Ejecuta de extremo a extremo las Fases 4, 5 y preparación de Fase 6 de CRISP-DM
 4. Selecciona el modelo final únicamente por ``val_macro_f1`` (sin mirar ``test``).
 5. Evalúa todos los modelos una sola vez sobre ``test``, genera métricas desglosadas
    por origen/especie, mide latencia y tamaño en disco (PI2), evalúa el estimador de
-   tamaño sobre las 204 referencias y genera las figuras vectoriales (``.svg``/``.png``).
+   tamaño sobre las 307 referencias y genera las figuras vectoriales (``.svg``/``.png``).
 6. Exporta el modelo ganador listo para usar en ``06_despliegue/models/``.
 
 Uso:
@@ -51,6 +51,7 @@ from src.config import (
     MIXED_STAGING_DIR,
     QUALITY_CLASSES,
     RANDOM_SEED,
+    SIZE_CATEGORIES,
 )
 from src.evaluation import (
     compute_classification_metrics,
@@ -72,7 +73,7 @@ from src.models_dl import (
 )
 from src.models_ml import encode_labels, train_classical_suite
 from src.preprocessing import load_clean_rgb
-from src.size_estimation import estimate_fruit_size
+from src.size_estimation import classify_size_category, estimate_fruit_size
 
 SIZE_REFERENCES_CSV = ANNOTATIONS_DIR / "size_references.csv"
 
@@ -126,7 +127,9 @@ def _breakdown_by_column(
 
 
 def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, Any]]:
-    """Evalúa el estimador de tamaño sobre las 204 referencias y cobertura en todo el dataset."""
+    """Evalúa el estimador de tamaño sobre las 307 referencias propias y cobertura total."""
+    from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score
+
     ref_df = pd.read_csv(SIZE_REFERENCES_CSV)
     rows: list[dict[str, object]] = []
     ref_failures = 0
@@ -134,17 +137,21 @@ def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[st
     for _, row in ref_df.iterrows():
         img = load_clean_rgb(PROJECT_ROOT / str(row["image_path"]))
         rgb = np.asarray(img)
+        ref_diam = float(row["reference_normalized_diameter"])
+        ref_cat = str(row["reference_size_category"]) if "reference_size_category" in ref_df.columns and pd.notna(row["reference_size_category"]) else classify_size_category(ref_diam)
         try:
             est = estimate_fruit_size(rgb)
-            err = abs(est.normalized_diameter - float(row["reference_normalized_diameter"]))
+            err = abs(est.normalized_diameter - ref_diam)
             rows.append(
                 {
                     "image_path": row["image_path"],
                     "species": row["species"],
-                    "reference_normalized_diameter": float(row["reference_normalized_diameter"]),
+                    "reference_normalized_diameter": ref_diam,
+                    "reference_size_category": ref_cat,
                     "estimated_normalized_diameter": round(est.normalized_diameter, 6),
                     "diagonal_ratio": round(est.diagonal_ratio, 6),
                     "size_category": est.size_category,
+                    "category_correct": bool(est.size_category == ref_cat),
                     "touches_border": est.touches_border,
                     "abs_error": round(err, 6),
                 }
@@ -154,6 +161,30 @@ def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[st
 
     eval_df = pd.DataFrame(rows)
     eval_df.to_csv(DIR_METRICAS / "evaluacion_tamano.csv", index=False)
+
+    # Métricas discretas de clasificación de tamaño (Pequeño / Mediano / Grande)
+    size_labels = list(SIZE_CATEGORIES)
+    y_true_cat = eval_df["reference_size_category"].astype(str).tolist()
+    y_pred_cat = eval_df["size_category"].astype(str).tolist()
+    cat_acc = round(float(accuracy_score(y_true_cat, y_pred_cat)), 4)
+    cat_macro_f1 = round(float(f1_score(y_true_cat, y_pred_cat, labels=size_labels, average="macro", zero_division=0)), 4)
+    cat_cm = confusion_matrix(y_true_cat, y_pred_cat, labels=size_labels).tolist()
+    cat_report = classification_report(
+        y_true_cat,
+        y_pred_cat,
+        labels=size_labels,
+        output_dict=True,
+        zero_division=0,
+    )
+    cat_per_class = {
+        cat: {
+            "precision": round(float(cat_report[cat]["precision"]), 4),
+            "recall": round(float(cat_report[cat]["recall"]), 4),
+            "f1": round(float(cat_report[cat]["f1-score"]), 4),
+            "support": int(cat_report[cat]["support"]),
+        }
+        for cat in size_labels
+    }
 
     # Comprobar cobertura de segmentación en todas las imágenes del dataset combinado
     cov_by_source: dict[str, dict[str, int]] = {}
@@ -181,6 +212,7 @@ def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[st
             "mae": round(float(grp["abs_error"].mean()), 5),
             "median_ae": round(float(grp["abs_error"].median()), 5),
             "rmse": round(float(np.sqrt(np.mean(grp["abs_error"] ** 2))), 5),
+            "category_accuracy": round(float(grp["category_correct"].mean()), 4),
         }
         for sp, grp in eval_df.groupby("species")
     }
@@ -188,6 +220,7 @@ def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[st
     summary = {
         "formula": "max(bbox_width, bbox_height) / max(image_width, image_height)",
         "rotation_invariant": True,
+        "rotation_scope": "90-degree rotations of the image and its axis-aligned box, not arbitrary angles; segmentation can change.",
         "references_total": int(len(ref_df)),
         "references_evaluated": int(len(eval_df)),
         "references_failed": int(ref_failures),
@@ -195,6 +228,11 @@ def evaluate_size_module(splits_df: pd.DataFrame) -> tuple[pd.DataFrame, dict[st
         "mae": round(float(eval_df["abs_error"].mean()), 5),
         "median_ae": round(float(eval_df["abs_error"].median()), 5),
         "rmse": round(float(np.sqrt(np.mean(eval_df["abs_error"] ** 2))), 5),
+        "size_category_labels": size_labels,
+        "size_category_accuracy": cat_acc,
+        "size_category_macro_f1": cat_macro_f1,
+        "size_category_confusion_matrix": cat_cm,
+        "size_category_per_class": cat_per_class,
         "per_species": per_species,
         "combined_dataset_coverage": cov_by_source,
     }
@@ -434,11 +472,12 @@ def main() -> None:
         pred_table[f"pred_{m_name}"] = [QUALITY_CLASSES[int(i)] for i in yp]
     pred_table.to_csv(DIR_METRICAS / "predicciones_test.csv", index=False)
 
-    # Evaluar estimación de tamaño sobre las 204 referencias y cobertura total
+    # Evaluar estimación de tamaño sobre las 307 referencias y cobertura total
     size_eval_df, size_summary = evaluate_size_module(df)
     print(
         f"\nEvaluación de tamaño: {size_summary['references_evaluated']}/{size_summary['references_total']} "
-        f"MAE={size_summary['mae']:.4f}, Mediana={size_summary['median_ae']:.4f}, RMSE={size_summary['rmse']:.4f}",
+        f"MAE={size_summary['mae']:.4f}, Mediana={size_summary['median_ae']:.4f}, RMSE={size_summary['rmse']:.4f}, "
+        f"Acc(cat)={size_summary['size_category_accuracy']:.4f}, Macro-F1(cat)={size_summary['size_category_macro_f1']:.4f}",
         flush=True,
     )
 

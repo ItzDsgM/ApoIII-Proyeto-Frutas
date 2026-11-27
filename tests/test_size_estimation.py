@@ -39,3 +39,22 @@ def test_size_estimator_rejects_uniform_blank_image() -> None:
     blank = np.full((120, 120, 3), 200, dtype=np.uint8)
     with pytest.raises(ValueError):
         estimate_fruit_size(blank)
+
+
+def test_own_size_annotations_are_complete_and_coherent() -> None:
+    """Verifica cobertura 307/307 y coherencia de umbrales en CSV de anotaciones propias."""
+    import pandas as pd
+    from src.config import ANNOTATIONS_DIR, OWN_ANNOTATIONS_CSV
+
+    own = pd.read_csv(OWN_ANNOTATIONS_CSV)
+    refs = pd.read_csv(ANNOTATIONS_DIR / "size_references.csv")
+    assert len(own) == 307
+    assert len(refs) == 307
+    assert set(own["image_path"]) == set(refs["image_path"])
+    assert own["reference_normalized_diameter"].notna().all()
+    assert own["size_category"].notna().all()
+    for _, row in refs.iterrows():
+        expected_cat = classify_size_category(float(row["reference_normalized_diameter"]))
+        assert row["reference_size_category"] == expected_cat
+    merged = own.merge(refs[["image_path", "reference_size_category"]], on="image_path")
+    assert (merged["size_category"] == merged["reference_size_category"]).all()

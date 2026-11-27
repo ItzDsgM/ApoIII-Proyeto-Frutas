@@ -8,6 +8,11 @@ Incluye:
   1. Máquina de Soporte Vectorial (SVM lineal y RBF).
   2. Random Forest.
   3. XGBoost (Gradient Boosted Trees).
+
+Referencias de terceros reutilizadas:
+- ``scikit-learn`` (BSD-3): ``DummyClassifier``, ``StandardScaler``, ``Pipeline``,
+  ``SVC``, ``RandomForestClassifier``, ``StratifiedGroupKFold`` y ``GridSearchCV``.
+- ``xgboost`` (Apache-2.0): ``XGBClassifier`` con histograma ``tree_method="hist"``.
 """
 
 from __future__ import annotations

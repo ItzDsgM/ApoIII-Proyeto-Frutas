@@ -3,7 +3,39 @@
 Proyecto Final — **Algoritmos y Programación III** (Semestre 2026-2)  
 Facultad de Ingeniería, Diseño y Ciencias Aplicadas · Ingeniería de Sistemas · **Universidad Icesi**
 
+### Integrantes del equipo
+| # | Nombre completo | Código institucional | Correo institucional |
+|---|---|---|---|
+| 1 | `[COMPLETAR NOMBRE INTEGRANTE 1]` | `[CÓDIGO 1]` | `[correo1@u.icesi.edu.co]` |
+| 2 | `[COMPLETAR NOMBRE INTEGRANTE 2]` | `[CÓDIGO 2]` | `[correo2@u.icesi.edu.co]` |
+| 3 | `[COMPLETAR NOMBRE INTEGRANTE 3]` | `[CÓDIGO 3]` | `[correo3@u.icesi.edu.co]` |
+
 Sistema automático basado en visión por computadora para clasificar frutas individuales en **3 categorías de calidad visual** (`Buena`, `Regular`, `Mala`) y estimar su **tamaño relativo** (diámetro normalizado invariante a orientación y categoría `Pequeño / Mediano / Grande`), desarrollado bajo la metodología **CRISP-DM**.
+
+---
+
+## Flujo metodológico CRISP-DM personalizado
+
+Versión vectorial exportada en [`01_comprension_negocio/diagrama_crisp_dm.svg`](01_comprension_negocio/diagrama_crisp_dm.svg) y arquitectura modular de software en [`06_despliegue/arquitectura_software.svg`](06_despliegue/arquitectura_software.svg).
+
+```mermaid
+flowchart TD
+    F1["1. Comprensión del Negocio<br/>Objetivo: calidad visual (3 clases) + tamaño relativo<br/>Restricciones éticas (PI1) e impactos (PI2)"]
+    F2["2. Comprensión de los Datos<br/>307 fotos propias (6 especies) + FruitNet Kaggle<br/>EDA: desbalanceo de Regular, resoluciones y fondos"]
+    F3["3. Preparación de los Datos<br/>Limpieza EXIF, Lanczos <=1024px, deduplicación SHA-256<br/>Segmentación CIELAB+Watershed en Mixed (84 recortes Regular)<br/>Agrupación dHash + StratifiedGroupKFold (621 / 156 / 194)"]
+    F4A["4A. Modelado Clásico<br/>Features: HSV + CIELAB + manchas + textura + HOG<br/>Dummy + SVM + Random Forest + XGBoost (GridSearchCV)"]
+    F4B["4B. Modelado Deep Learning<br/>Data Augmentation + Cross-Entropy ponderada<br/>CNN simple desde cero vs. MobileNetV2 congelada"]
+    F4C["4C. Estimación de Tamaño<br/>Segmentación Lab+HSV+Otsu<br/>Diámetro normalizado max(bw,bh)/max(W,H)"]
+    F5["5. Evaluación<br/>Selección estricta por Val Macro-F1<br/>Prueba reservada única, overfitting, errores y 307 refs de tamaño"]
+    F6["6. Despliegue<br/>App Streamlit offline (carga + cámara)<br/>Calidad + probabilidades + tamaño + máscara + latencia"]
+
+    F1 --> F2 --> F3
+    F3 --> F4A --> F5
+    F3 --> F4B --> F5
+    F3 --> F4C --> F5
+    F5 -->|"Modelo ganador + métricas"| F6
+    F5 -.->|"Ajustes documentados en nueva iteración"| F3
+```
 
 ---
 
@@ -11,15 +43,15 @@ Sistema automático basado en visión por computadora para clasificar frutas ind
 
 ```text
 APO-III-Proyecto-Frutas/
-├── 01_comprension_negocio/        # Fase 1: formulación matemática (PI3), ética ACM (PI1), impactos (PI2) y flujo CRISP-DM
-├── 02_comprension_datos/          # Fase 2: notebook EDA ejecutado con gráficas y galería de muestras
+├── 01_comprension_negocio/        # Fase 1: formulación matemática (PI3), ética ACM (PI1), impactos ex-ante (PI2) y flujo CRISP-DM (.mmd/.svg)
+├── 02_comprension_datos/          # Fase 2: notebook EDA ejecutado con calidad de imagen, tamaños y galería tolerante a falta de Kaggle
 ├── 03_preparacion_datos/          # Fase 3: limpieza EXIF, segmentación de Mixed, splits anti-fuga (dHash)
 ├── 04_modelado/                   # Fase 4: entrenamiento reproducible + notebooks de ML clásico y Deep Learning
-├── 05_evaluacion/                 # Fase 5: notebook de evaluación, métricas JSON/CSV y 7 figuras vectoriales (.svg/.png)
-├── 06_despliegue/                 # Fase 6: aplicación Streamlit offline + modelo ganador (best_quality_model.pt)
+├── 05_evaluacion/                 # Fase 5: notebook de evaluación, impactos ex-post, métricas JSON/CSV y 7 figuras vectoriales (.svg/.png)
+├── 06_despliegue/                 # Fase 6: app Streamlit offline, plan de despliegue, diagrama arquitectura (.svg) y best_quality_model.pt
 ├── src/                           # Módulos Python limpios (PEP 8) y documentados
-├── data/                          # Fotos propias limpias (16.8 MB, sin EXIF), recortes Mixed y CSVs de anotaciones
-├── tests/                         # Suite pytest (preprocesamiento, tamaño, inferencia y Streamlit AppTest)
+├── data/                          # Fotos propias limpias (16.8 MB, sin EXIF), recortes Mixed y CSVs unificados (307/307 calidad + tamaño)
+├── tests/                         # Suite pytest (preprocesamiento, tamaño/anotaciones, inferencia y Streamlit AppTest)
 └── docs/                          # Reservado para informe final IEEE (<=7 págs) y video (<=10 min)
 ```
 
@@ -64,7 +96,8 @@ Todos los modelos se evaluaron sobre exactamente la misma partición de prueba. 
 
 Se emplea segmentación combinada **CIELAB + saturación HSV + Otsu + selección por centralidad** y la métrica invariante a rotaciones de 90° `max(bw, bh) / max(W, H)`:
 
-- **Evaluación sobre 204 referencias geométricas propias:** cobertura **204/204 (100 %)**, **MAE = `0.0124`**, **Mediana = `0.0060`**, **RMSE = `0.0192`**.
+- **Evaluación sobre 307/307 referencias geométricas propias:** cobertura **307/307 (100 %)**, **MAE = `0.0222`**, **Mediana = `0.0067`**, **RMSE = `0.0643`**.
+- **Clasificación discreta de tamaño (`Pequeño / Mediano / Grande`, umbrales `0.30` y `0.55`):** **Exactitud = `92.83 %`**, **Macro-F1 = `0.9311`**.
 - **Cobertura sobre el dataset combinado (971 imágenes):** **969/971 (99.8 %)** (`307/307` propias, `580/580` Kaggle, `82/84` recortes `Mixed`).
 
 ---
@@ -96,9 +129,10 @@ python 04_modelado/entrenar_modelos.py
 
 ---
 
-## Fuentes y licencias
+## Fuentes, código de terceros y licencias
 
 - Kaggle *Fruit Quality Classification*: https://www.kaggle.com/datasets/ryandpark/fruit-quality-classification
 - FruitNet original (CC BY 4.0): Meshram & Patil (2021), DOI `10.1016/j.dib.2021.107686`, https://data.mendeley.com/datasets/b6fftwbr2v/2
-- MobileNetV2 preentrenada (`IMAGENET1K_V2`): PyTorch / TorchVision
+- MobileNetV2 preentrenada (`IMAGENET1K_V2`): PyTorch / TorchVision (licencia BSD-3; Sandler et al., CVPR 2018)
+- Algoritmos y bibliotecas reutilizadas: OpenCV (Watershed, Otsu, Sobel, Laplaciano; Apache-2.0), scikit-learn (`StratifiedGroupKFold`, `SVC`, `RandomForestClassifier`, `DummyClassifier`), XGBoost, HOG (Dalal & Triggs, CVPR 2005) y Streamlit.
 - Código de Ética ACM: https://www.acm.org/code-of-ethics

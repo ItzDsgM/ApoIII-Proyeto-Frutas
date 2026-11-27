@@ -8,19 +8,21 @@ Vector de características por imagen (408 dimensiones):
    capturan tono (madurez), saturación (frescura) y brillo global.
 2. Estadísticos perceptuales en espacio CIELAB (3 canales × 6 estadísticos = 18 dims):
    media, desviación estándar, asimetría (skewness) y percentiles 10, 50 y 90 de
-   ``L*``, ``a*`` y ``b*`` para detectar oscurecimiento y pérdida de viveza.
+   ``L_opencv``, ``a`` y ``b`` para detectar oscurecimiento y pérdida de viveza.
 3. Indicadores matemáticos de manchas y deterioro superficial (6 dims):
-   - Proporción de píxeles muy oscuros (``L* < 45``).
+   - Proporción de píxeles muy oscuros (``L_opencv < 60`` en escala OpenCV ``[0, 255]``,
+     equivalente aproximado a ``L* < 23.5`` en escala CIE ``[0, 100]``).
    - Proporción de píxeles pardos/magullados (tono cálido oscuro con baja luminancia).
-   - Proporción de anomalías oscuras locales: ``L* < mediana(L*) - 1.5 * IQR(L*)``
-     (distingue manchas puntuales de clase ``Regular`` frente a deterioro global).
+   - Proporción de anomalías oscuras locales: ``L_opencv < max(35, mediana - 1.5 * IQR)``
+     en escala ``[0, 255]`` (distingue manchas puntuales de ``Regular`` frente a deterioro global).
    - Número normalizado de manchas conexas y área relativa de la mayor mancha.
-   - Contraste intercuartílico de luminancia ``IQR(L*) / 255``.
+   - Contraste intercuartílico de luminancia ``IQR(L_opencv) / 255``.
 4. Descriptores de textura y rugosidad (12 dims):
    energía de gradiente Sobel (media, desviación, p90), varianza y cuantiles del
    Laplaciano (moho, arrugas, cicatrices) y desviación local de luminancia (bloques 8×8).
 5. Descriptor HOG compacto sobre ``64×64`` en escala de grises (324 dims):
-   celdas ``16×16``, bloques ``32×32``, paso ``16`` y ``9`` orientaciones.
+   celdas ``16×16``, bloques ``32×32``, paso ``16`` y ``9`` orientaciones
+   (formulación L2-Hys basada en Dalal & Triggs, CVPR 2005; implementado con OpenCV/NumPy).
 """
 
 from __future__ import annotations
@@ -135,17 +137,19 @@ def extract_classical_features_rgb(
         )
 
     # 3. Indicadores de manchas y deterioro superficial (6 dims)
-    l_ch = lab[:, :, 0]
-    h_ch, s_ch, v_ch = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+    l_opencv = lab[:, :, 0]  # Escala OpenCV [0, 255] (L* = L_opencv * 100 / 255)
+    hue, sat, val = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
 
-    dark_ratio = float(np.mean(l_ch < 60.0))
-    brown_mask = (h_ch <= 28) & (s_ch >= 35) & (v_ch >= 25) & (v_ch <= 155)
+    # L_opencv < 60 equivale aproximadamente a L* < 23.5 en CIE [0, 100]
+    dark_ratio = float(np.mean(l_opencv < 60.0))
+    # Píxeles pardo-oscuros (tonos cálidos H <= 28 con saturación y brillo intermedio-bajo)
+    brown_mask = (hue <= 28) & (sat >= 35) & (val >= 25) & (val <= 155)
     brown_ratio = float(np.mean(brown_mask))
 
-    q25, q50, q75 = np.percentile(l_ch, [25, 50, 75])
+    q25, q50, q75 = np.percentile(l_opencv, [25, 50, 75])
     iqr = max(1.0, float(q75 - q25))
     local_dark_thresh = max(35.0, float(q50 - 1.5 * iqr))
-    spot_mask = (l_ch < local_dark_thresh).astype(np.uint8)
+    spot_mask = (l_opencv < local_dark_thresh).astype(np.uint8)
     spot_ratio = float(np.mean(spot_mask))
 
     num_spots, _, spot_stats, _ = cv2.connectedComponentsWithStats(spot_mask, connectivity=8)
@@ -155,7 +159,7 @@ def extract_classical_features_rgb(
         if int(spot_stats[i, cv2.CC_STAT_AREA]) >= 12
     ]
     spot_count_norm = min(1.0, len(valid_areas) / 20.0)
-    largest_spot_ratio = (max(valid_areas) / float(l_ch.size)) if valid_areas else 0.0
+    largest_spot_ratio = (max(valid_areas) / float(l_opencv.size)) if valid_areas else 0.0
     iqr_norm = iqr / 255.0
 
     defect_feats = np.array(

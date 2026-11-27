@@ -77,5 +77,5 @@ JPEG_QUALITY = 90
 DL_IMAGE_SIZE = 224
 CLASSICAL_IMAGE_SIZE = 128
 
-# Categorías relativas de tamaño (basadas en diámetro normalizado respecto a la diagonal)
+# Categorías relativas de tamaño (basadas en diámetro normalizado respecto al lado mayor max(W, H))
 SIZE_CATEGORIES: tuple[str, ...] = ("Pequeño", "Mediano", "Grande")

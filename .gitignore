@@ -26,3 +26,4 @@ data/own_photos/**/Descartar/**
 Thumbs.db
 .env
 .env.*
+.agents/
