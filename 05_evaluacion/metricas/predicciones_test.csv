@@ -1,0 +1,195 @@
+image_path,species,source,quality,pred_Baseline (Mayoritaria),pred_Baseline (Estratificada),pred_SVM (Clásico),pred_Random Forest (Clásico),pred_XGBoost (Clásico),pred_CNN simple (desde cero),pred_MobileNetV2 (Transfer)
+data/own_photos/banano/Buena/banano_005_buena.jpg,banano,Propia,Buena,Mala,Regular,Buena,Buena,Buena,Buena,Buena
+data/own_photos/banano/Buena/banano_012_buena.jpg,banano,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Mala,Buena
+data/own_photos/banano/Buena/banano_017_buena.jpg,banano,Propia,Buena,Mala,Buena,Buena,Mala,Buena,Buena,Buena
+data/own_photos/banano/Buena/banano_020_buena.jpg,banano,Propia,Buena,Mala,Mala,Mala,Mala,Mala,Mala,Buena
+data/own_photos/banano/Buena/banano_022_buena.jpg,banano,Propia,Buena,Mala,Regular,Mala,Buena,Mala,Buena,Buena
+data/own_photos/banano/Mala/banano_023_mala.jpg,banano,Propia,Mala,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/banano/Mala/banano_032_mala.jpg,banano,Propia,Mala,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_008_buena.jpg,limon,Propia,Buena,Mala,Regular,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_017_buena.jpg,limon,Propia,Buena,Mala,Buena,Regular,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_020_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_022_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_024_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_025_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_027_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_029_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Regular,Buena
+data/own_photos/limon/Buena/limon_031_buena.jpg,limon,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Buena/limon_035_buena.jpg,limon,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Regular,Buena
+data/own_photos/limon/Buena/limon_037_buena.jpg,limon,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/limon/Regular/limon_040_regular.jpg,limon,Propia,Regular,Mala,Mala,Regular,Buena,Regular,Buena,Regular
+data/own_photos/limon/Regular/limon_043_regular.jpg,limon,Propia,Regular,Mala,Mala,Buena,Buena,Buena,Regular,Buena
+data/own_photos/mango/Buena/mango_008_buena.jpg,mango,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/mango/Buena/mango_009_buena.jpg,mango,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Regular
+data/own_photos/mango/Buena/mango_010_buena.jpg,mango,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/mango/Buena/mango_011_buena.jpg,mango,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/mango/Regular/mango_039_regular.jpg,mango,Propia,Regular,Mala,Buena,Regular,Buena,Buena,Buena,Buena
+data/own_photos/mango/Mala/mango_054_mala.jpg,mango,Propia,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/own_photos/mango/Mala/mango_055_mala.jpg,mango,Propia,Mala,Mala,Mala,Regular,Mala,Mala,Mala,Mala
+data/own_photos/manzana/Buena/manzana_002_buena.jpg,manzana,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/manzana/Buena/manzana_008_buena.jpg,manzana,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/manzana/Buena/manzana_013_buena.jpg,manzana,Propia,Buena,Mala,Mala,Buena,Buena,Mala,Buena,Buena
+data/own_photos/manzana/Buena/manzana_014_buena.jpg,manzana,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/manzana/Buena/manzana_015_buena.jpg,manzana,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Mala,Buena
+data/own_photos/manzana/Buena/manzana_016_buena.jpg,manzana,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Mala,Buena
+data/own_photos/manzana/Buena/manzana_022_buena.jpg,manzana,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/manzana/Buena/manzana_029_buena.jpg,manzana,Propia,Buena,Mala,Buena,Mala,Mala,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_004_buena.jpg,naranja,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_007_buena.jpg,naranja,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_014_buena.jpg,naranja,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_023_buena.jpg,naranja,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_026_buena.jpg,naranja,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_033_buena.jpg,naranja,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_041_buena.jpg,naranja,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_046_buena.jpg,naranja,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Buena/naranja_071_buena.jpg,naranja,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Mala/naranja_074_mala.jpg,naranja,Propia,Mala,Mala,Regular,Mala,Buena,Mala,Mala,Buena
+data/own_photos/naranja/Mala/naranja_076_mala.jpg,naranja,Propia,Mala,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/naranja/Mala/naranja_080_mala.jpg,naranja,Propia,Mala,Mala,Mala,Mala,Buena,Mala,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_001_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_006_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_015_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_020_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_026_buena.jpg,tomate_arbol,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_029_buena.jpg,tomate_arbol,Propia,Buena,Mala,Regular,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_031_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_035_buena.jpg,tomate_arbol,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_036_buena.jpg,tomate_arbol,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_044_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_047_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_048_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_049_buena.jpg,tomate_arbol,Propia,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/own_photos/tomate_arbol/Buena/tomate_arbol_051_buena.jpg,tomate_arbol,Propia,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/mixed_crops/banano/Regular/mixed_banano_001_regular.jpg,banano,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Mala,Regular,Regular
+data/mixed_crops/banano/Regular/mixed_banano_006_regular.jpg,banano,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Mala,Mala,Mala,Regular,Regular
+data/mixed_crops/banano/Regular/mixed_banano_020_regular.jpg,banano,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Buena,Buena,Buena,Regular,Regular
+data/mixed_crops/banano/Regular/mixed_banano_021_regular.jpg,banano,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Buena,Regular,Regular,Regular,Regular
+data/mixed_crops/banano/Regular/mixed_banano_026_regular.jpg,banano,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Mala,Mala,Buena,Mala,Regular
+data/mixed_crops/limon/Regular/mixed_limon_005_regular.jpg,limon,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Buena,Buena,Buena,Regular,Regular
+data/mixed_crops/limon/Regular/mixed_limon_016_regular.jpg,limon,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Buena,Buena,Mala,Regular,Regular
+data/mixed_crops/limon/Regular/mixed_limon_017_regular.jpg,limon,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Buena,Buena,Buena,Regular,Regular
+data/mixed_crops/limon/Regular/mixed_limon_018_regular.jpg,limon,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Regular,Regular,Regular
+data/mixed_crops/limon/Regular/mixed_limon_019_regular.jpg,limon,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Buena,Buena,Regular,Regular,Regular
+data/mixed_crops/manzana/Regular/mixed_manzana_010_regular.jpg,manzana,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Regular,Regular,Regular
+data/mixed_crops/manzana/Regular/mixed_manzana_015_regular.jpg,manzana,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Buena,Buena,Buena,Regular,Regular
+data/mixed_crops/naranja/Regular/mixed_naranja_014_regular.jpg,naranja,FruitNet_Mixed_Segmentada,Regular,Mala,Mala,Regular,Regular,Regular,Regular,Regular
+data/mixed_crops/naranja/Regular/mixed_naranja_015_regular.jpg,naranja,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Regular,Regular,Regular
+data/mixed_crops/naranja/Regular/mixed_naranja_016_regular.jpg,naranja,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Regular,Regular,Regular
+data/mixed_crops/naranja/Regular/mixed_naranja_017_regular.jpg,naranja,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Buena,Regular,Regular,Regular
+data/mixed_crops/naranja/Regular/mixed_naranja_018_regular.jpg,naranja,FruitNet_Mixed_Segmentada,Regular,Mala,Buena,Regular,Regular,Regular,Regular,Regular
+data/external/Good Quality_Fruits/Apple_Good/20190809_120338.jpg,manzana,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Apple_Good/20190809_153322.jpg,manzana,FruitNet_Kaggle,Buena,Mala,Regular,Buena,Mala,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Apple_Good/IMG20200728174518_01.jpg,manzana,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Apple_Good/IMG_9394.JPG,manzana,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Apple_Good/IMG_9499.JPG,manzana,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Mala,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG20200729190220.jpg,banano,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG20200730132208.jpg,banano,FruitNet_Kaggle,Buena,Mala,Buena,Mala,Buena,Buena,Mala,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG20200730132316_01.jpg,banano,FruitNet_Kaggle,Buena,Mala,Buena,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8520.JPG,banano,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Mala,Mala,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8571.JPG,banano,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8622.JPG,banano,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8849.JPG,banano,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8925.JPG,banano,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Mala,Buena,Regular,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_8950.JPG,banano,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Mala,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_9027.JPG,banano,FruitNet_Kaggle,Buena,Mala,Regular,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_9128.JPG,banano,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Banana_Good/IMG_9305.JPG,banano,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_102640.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_102938_1.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_103631.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_103654_1.jpg,limon,FruitNet_Kaggle,Buena,Mala,Regular,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_103724_1.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_104337.jpg,limon,FruitNet_Kaggle,Buena,Mala,Regular,Buena,Mala,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_104436.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_110817.jpg,limon,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_110923.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_111029.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_111122.jpg,limon,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Lime_Good/IMG_20190902_111201.jpg,limon,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG20200728190429.jpg,naranja,FruitNet_Kaggle,Buena,Mala,Buena,Buena,Mala,Mala,Mala,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG_1916.JPG,naranja,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Good Quality_Fruits/Orange_Good/IMG_1946.JPG,naranja,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Mala,Mala,Mala,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG_20190924_152452.jpg,naranja,FruitNet_Kaggle,Buena,Mala,Buena,Mala,Mala,Mala,Buena,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG_20190924_153436.jpg,naranja,FruitNet_Kaggle,Buena,Mala,Mala,Mala,Buena,Buena,Buena,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG_2453.JPG,naranja,FruitNet_Kaggle,Buena,Mala,Mala,Buena,Buena,Regular,Regular,Buena
+data/external/Good Quality_Fruits/Orange_Good/IMG_2653.JPG,naranja,FruitNet_Kaggle,Buena,Mala,Mala,Regular,Regular,Regular,Regular,Buena
+data/external/Bad Quality_Fruits/Apple_Bad/IMG20200728180304_01.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG20200728181334.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Regular,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190824_175435.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190824_175447.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190824_175748_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171359.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171508.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171619.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171655.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171725.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171753.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171759.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171822.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171830_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171836_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171848.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171908_2.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171920.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171930.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_171952_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172012_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172024.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172047.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Buena,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172112_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172136.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172145_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172155_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172210.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172217.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172225_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172257_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Buena,Buena,Buena,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172405_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172606.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_20190910_172622_1.jpg,manzana,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_8135.JPG,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Buena,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_8146.JPG,manzana,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Buena,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_8181.JPG,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Regular,Mala
+data/external/Bad Quality_Fruits/Apple_Bad/IMG_8227.JPG,manzana,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG20200729190340.jpg,banano,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG20200730132807.jpg,banano,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Buena,Buena,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175149_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175329_2.jpg,banano,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175351_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175428.jpg,banano,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175803_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175816_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190910_175844.jpg,banano,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190923_184111_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_20190923_184144_1.jpg,banano,FruitNet_Kaggle,Mala,Mala,Regular,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7732.JPG,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7754.JPG,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7787.JPG,banano,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7798.JPG,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7842.JPG,banano,FruitNet_Kaggle,Mala,Mala,Mala,Buena,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Banana_Bad/IMG_7875.JPG,banano,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190820_085611_1.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190820_085633.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190822_075759_1.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Buena,Mala,Buena,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190822_080014_1.jpg,limon,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190923_183644.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190923_183652_1.jpg,limon,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190923_183811.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_20190923_183948.jpg,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_6968.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_6979.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_6990.JPG,limon,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7191.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7224.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7246.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Buena,Buena,Buena,Buena
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7327.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Buena,Mala,Buena,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7382.JPG,limon,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7393.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7404.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7524.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Lime_Bad/IMG_7667.JPG,limon,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Orange_Bad/IMG20200728185945.jpg,naranja,FruitNet_Kaggle,Mala,Mala,Buena,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Orange_Bad/IMG_20190824_174821_1.jpg,naranja,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Orange_Bad/IMG_20190923_181549_1.jpg,naranja,FruitNet_Kaggle,Mala,Mala,Mala,Buena,Buena,Buena,Mala,Buena
+data/external/Bad Quality_Fruits/Orange_Bad/IMG_20190923_181837.jpg,naranja,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala
+data/external/Bad Quality_Fruits/Orange_Bad/IMG_20190923_181934_1.jpg,naranja,FruitNet_Kaggle,Mala,Mala,Mala,Mala,Mala,Mala,Mala,Mala

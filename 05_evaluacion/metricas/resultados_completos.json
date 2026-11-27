@@ -1,0 +1,1856 @@
+{
+  "created_utc": "2026-11-21T03:31:27.481023+00:00",
+  "seed": 42,
+  "dataset_summary": {
+    "total_images": 971,
+    "unique_leakage_groups": 792,
+    "splits": {
+      "train": 621,
+      "test": 194,
+      "val": 156
+    },
+    "classes": {
+      "Mala": 437,
+      "Buena": 435,
+      "Regular": 99
+    },
+    "sources": {
+      "FruitNet_Kaggle": 580,
+      "Propia": 307,
+      "FruitNet_Mixed_Segmentada": 84
+    },
+    "species": {
+      "naranja": 254,
+      "limon": 209,
+      "banano": 203,
+      "manzana": 189,
+      "mango": 58,
+      "tomate_arbol": 58
+    }
+  },
+  "environment_hardware": {
+    "os": "Linux-6.12.0-160100.8-default-x86_64-with-glibc2.40",
+    "python": "3.12.16",
+    "cpu_cores": 12,
+    "device": "cpu",
+    "torch": "2.15.0+cpu",
+    "torchvision": "0.29.2+cpu",
+    "sklearn": "1.9.1",
+    "classical_feature_extraction_sec": 10.97
+  },
+  "selected_model_by_val": "MobileNetV2 (Transfer)",
+  "deployment_metadata": {
+    "model_name": "MobileNetV2 (Transfer)",
+    "family": "deep_learning",
+    "classes": [
+      "Buena",
+      "Regular",
+      "Mala"
+    ],
+    "selected_by": "val_macro_f1",
+    "val_macro_f1": 0.9013,
+    "test_macro_f1": 0.9382,
+    "test_accuracy": 0.9433,
+    "test_balanced_accuracy": 0.9322,
+    "inference_ms_per_img": 35.44,
+    "trained_utc": "2026-11-21T03:31:15.768363+00:00",
+    "artifact_file": "best_quality_model.pt",
+    "arch_name": "mobilenet_v2",
+    "image_size": 224,
+    "artifact_size_mb": 9.344
+  },
+  "models": {
+    "Baseline (Mayoritaria)": {
+      "family": "baseline",
+      "best_params": {
+        "strategy": "most_frequent"
+      },
+      "cv_train_macro_f1": 0.2072,
+      "cv_val_macro_f1": 0.2065,
+      "train_macro_f1": 0.2072,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.4487,
+        "balanced_accuracy": 0.3333,
+        "macro_f1": 0.2065,
+        "weighted_f1": 0.278,
+        "per_class": {
+          "Buena": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.4487,
+            "recall": 1.0,
+            "f1": 0.6195,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            70
+          ],
+          [
+            0,
+            0,
+            16
+          ],
+          [
+            0,
+            0,
+            70
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.4485,
+        "balanced_accuracy": 0.3333,
+        "macro_f1": 0.2064,
+        "weighted_f1": 0.2777,
+        "per_class": {
+          "Buena": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.4485,
+            "recall": 1.0,
+            "f1": 0.6192,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            0,
+            0,
+            87
+          ],
+          [
+            0,
+            0,
+            20
+          ],
+          [
+            0,
+            0,
+            87
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.6897,
+          "macro_f1_present_classes": 0.4082,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.0,
+          "macro_f1_present_classes": 0.0,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.1148,
+          "macro_f1_present_classes": 0.0686,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.4634,
+          "macro_f1_present_classes": 0.2111,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.4,
+          "macro_f1_present_classes": 0.1905,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.2857,
+          "macro_f1_present_classes": 0.1481,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.717,
+          "macro_f1_present_classes": 0.2784,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.2759,
+          "macro_f1_present_classes": 0.1441,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 0.0,
+          "macro_f1_present_classes": 0.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.0008,
+      "train_time_sec": 0.008,
+      "inference_ms_per_img": 0.1,
+      "model_size_mb": 0.0
+    },
+    "Baseline (Estratificada)": {
+      "family": "baseline",
+      "best_params": {
+        "strategy": "stratified"
+      },
+      "cv_train_macro_f1": 0.3666,
+      "cv_val_macro_f1": 0.3385,
+      "train_macro_f1": 0.3666,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.4359,
+        "balanced_accuracy": 0.3399,
+        "macro_f1": 0.3385,
+        "weighted_f1": 0.4318,
+        "per_class": {
+          "Buena": {
+            "precision": 0.473,
+            "recall": 0.5,
+            "f1": 0.4861,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.0769,
+            "recall": 0.0625,
+            "f1": 0.069,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.4638,
+            "recall": 0.4571,
+            "f1": 0.4604,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            35,
+            4,
+            31
+          ],
+          [
+            9,
+            1,
+            6
+          ],
+          [
+            30,
+            8,
+            32
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.3402,
+        "balanced_accuracy": 0.2529,
+        "macro_f1": 0.2484,
+        "weighted_f1": 0.3342,
+        "per_class": {
+          "Buena": {
+            "precision": 0.3737,
+            "recall": 0.4253,
+            "f1": 0.3978,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.3625,
+            "recall": 0.3333,
+            "f1": 0.3473,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            37,
+            8,
+            42
+          ],
+          [
+            11,
+            0,
+            9
+          ],
+          [
+            51,
+            7,
+            29
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.319,
+          "macro_f1_present_classes": 0.3205,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.0,
+          "macro_f1_present_classes": 0.0,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.4754,
+          "macro_f1_present_classes": 0.2746,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.3171,
+          "macro_f1_present_classes": 0.2405,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.18,
+          "macro_f1_present_classes": 0.1331,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.7143,
+          "macro_f1_present_classes": 0.5167,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.3585,
+          "macro_f1_present_classes": 0.2514,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.3793,
+          "macro_f1_present_classes": 0.2817,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 0.6429,
+          "macro_f1_present_classes": 0.7826,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.1182,
+      "train_time_sec": 0.0,
+      "inference_ms_per_img": 0.1,
+      "model_size_mb": 0.0
+    },
+    "SVM (Clásico)": {
+      "family": "ml_clasico",
+      "best_params": {
+        "svc__C": 3.0,
+        "svc__gamma": "scale",
+        "svc__kernel": "rbf"
+      },
+      "cv_train_macro_f1": 0.9988,
+      "cv_val_macro_f1": 0.7872,
+      "train_macro_f1": 0.9988,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.8269,
+        "balanced_accuracy": 0.7429,
+        "macro_f1": 0.7757,
+        "weighted_f1": 0.8227,
+        "per_class": {
+          "Buena": {
+            "precision": 0.7895,
+            "recall": 0.8571,
+            "f1": 0.8219,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.8889,
+            "recall": 0.5,
+            "f1": 0.64,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.8592,
+            "recall": 0.8714,
+            "f1": 0.8652,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            60,
+            1,
+            9
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            9,
+            0,
+            61
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.8299,
+        "balanced_accuracy": 0.7452,
+        "macro_f1": 0.7687,
+        "weighted_f1": 0.8248,
+        "per_class": {
+          "Buena": {
+            "precision": 0.8353,
+            "recall": 0.8161,
+            "f1": 0.8256,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.7692,
+            "recall": 0.5,
+            "f1": 0.6061,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.8333,
+            "recall": 0.9195,
+            "f1": 0.8743,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            71,
+            2,
+            14
+          ],
+          [
+            8,
+            10,
+            2
+          ],
+          [
+            6,
+            1,
+            80
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.8707,
+          "macro_f1_present_classes": 0.8393,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.4706,
+          "macro_f1_present_classes": 0.64,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.8525,
+          "macro_f1_present_classes": 0.6515,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.6829,
+          "macro_f1_present_classes": 0.5814,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.8,
+          "macro_f1_present_classes": 0.6988,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.8571,
+          "macro_f1_present_classes": 0.7778,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.9623,
+          "macro_f1_present_classes": 0.8589,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.7586,
+          "macro_f1_present_classes": 0.7781,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.2301,
+      "train_time_sec": 7.743,
+      "inference_ms_per_img": 29.05,
+      "model_size_mb": 0.862
+    },
+    "Random Forest (Clásico)": {
+      "family": "ml_clasico",
+      "best_params": {
+        "max_depth": 16,
+        "max_features": "sqrt",
+        "min_samples_leaf": 3,
+        "n_estimators": 400
+      },
+      "cv_train_macro_f1": 0.9974,
+      "cv_val_macro_f1": 0.7888,
+      "train_macro_f1": 0.9988,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.8205,
+        "balanced_accuracy": 0.7381,
+        "macro_f1": 0.765,
+        "weighted_f1": 0.8168,
+        "per_class": {
+          "Buena": {
+            "precision": 0.775,
+            "recall": 0.8857,
+            "f1": 0.8267,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.8,
+            "recall": 0.5,
+            "f1": 0.6154,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.8788,
+            "recall": 0.8286,
+            "f1": 0.8529,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            62,
+            1,
+            7
+          ],
+          [
+            7,
+            8,
+            1
+          ],
+          [
+            11,
+            1,
+            58
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.8093,
+        "balanced_accuracy": 0.7042,
+        "macro_f1": 0.7374,
+        "weighted_f1": 0.8016,
+        "per_class": {
+          "Buena": {
+            "precision": 0.7766,
+            "recall": 0.8391,
+            "f1": 0.8066,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.8889,
+            "recall": 0.4,
+            "f1": 0.5517,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.8352,
+            "recall": 0.8736,
+            "f1": 0.8539,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            73,
+            1,
+            13
+          ],
+          [
+            10,
+            8,
+            2
+          ],
+          [
+            11,
+            0,
+            76
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.8534,
+          "macro_f1_present_classes": 0.8244,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.4706,
+          "macro_f1_present_classes": 0.64,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.8197,
+          "macro_f1_present_classes": 0.4102,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.7317,
+          "macro_f1_present_classes": 0.6869,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.82,
+          "macro_f1_present_classes": 0.6678,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.8571,
+          "macro_f1_present_classes": 0.6296,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.8868,
+          "macro_f1_present_classes": 0.7903,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.6552,
+          "macro_f1_present_classes": 0.6625,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.2614,
+      "train_time_sec": 12.389,
+      "inference_ms_per_img": 70.41,
+      "model_size_mb": 1.326
+    },
+    "XGBoost (Clásico)": {
+      "family": "ml_clasico",
+      "best_params": {
+        "colsample_bytree": 0.8,
+        "learning_rate": 0.12,
+        "max_depth": 5,
+        "n_estimators": 220,
+        "subsample": 0.85
+      },
+      "cv_train_macro_f1": 1.0,
+      "cv_val_macro_f1": 0.8297,
+      "train_macro_f1": 1.0,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.8462,
+        "balanced_accuracy": 0.7732,
+        "macro_f1": 0.798,
+        "weighted_f1": 0.8435,
+        "per_class": {
+          "Buena": {
+            "precision": 0.7927,
+            "recall": 0.9286,
+            "f1": 0.8553,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.8182,
+            "recall": 0.5625,
+            "f1": 0.6667,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.9206,
+            "recall": 0.8286,
+            "f1": 0.8722,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            65,
+            1,
+            4
+          ],
+          [
+            6,
+            9,
+            1
+          ],
+          [
+            11,
+            1,
+            58
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.8557,
+        "balanced_accuracy": 0.7644,
+        "macro_f1": 0.7927,
+        "weighted_f1": 0.8506,
+        "per_class": {
+          "Buena": {
+            "precision": 0.837,
+            "recall": 0.8851,
+            "f1": 0.8603,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.8333,
+            "recall": 0.5,
+            "f1": 0.625,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.8778,
+            "recall": 0.908,
+            "f1": 0.8927,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            77,
+            2,
+            8
+          ],
+          [
+            7,
+            10,
+            3
+          ],
+          [
+            8,
+            0,
+            79
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.8966,
+          "macro_f1_present_classes": 0.883,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.5294,
+          "macro_f1_present_classes": 0.6923,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.8689,
+          "macro_f1_present_classes": 0.6648,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.7561,
+          "macro_f1_present_classes": 0.637,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.88,
+          "macro_f1_present_classes": 0.8083,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.8571,
+          "macro_f1_present_classes": 0.6296,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.9434,
+          "macro_f1_present_classes": 0.8431,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.7241,
+          "macro_f1_present_classes": 0.7381,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.2073,
+      "train_time_sec": 78.907,
+      "inference_ms_per_img": 28.56,
+      "model_size_mb": 0.156
+    },
+    "CNN simple (desde cero)": {
+      "family": "deep_learning",
+      "arch_name": "simple_cnn",
+      "image_size": 128,
+      "best_epoch": 17,
+      "best_params": {
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "batch_size": 32,
+        "epochs_ran": 22
+      },
+      "tuning_trials": [
+        {
+          "lr": 0.001,
+          "val_macro_f1": 0.8342036832820848,
+          "best_epoch": 17
+        },
+        {
+          "lr": 0.0003,
+          "val_macro_f1": 0.8195395988455658,
+          "best_epoch": 17
+        }
+      ],
+      "params_info": {
+        "total_params": 101923,
+        "trainable_params": 101923
+      },
+      "train_macro_f1": 0.8021,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.8526,
+        "balanced_accuracy": 0.8583,
+        "macro_f1": 0.8342,
+        "weighted_f1": 0.8537,
+        "per_class": {
+          "Buena": {
+            "precision": 0.8955,
+            "recall": 0.8571,
+            "f1": 0.8759,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.7,
+            "recall": 0.875,
+            "f1": 0.7778,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.8551,
+            "recall": 0.8429,
+            "f1": 0.8489,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            60,
+            1,
+            9
+          ],
+          [
+            1,
+            14,
+            1
+          ],
+          [
+            6,
+            5,
+            59
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.8351,
+        "balanced_accuracy": 0.8389,
+        "macro_f1": 0.8013,
+        "weighted_f1": 0.8384,
+        "per_class": {
+          "Buena": {
+            "precision": 0.8625,
+            "recall": 0.7931,
+            "f1": 0.8263,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.5862,
+            "recall": 0.85,
+            "f1": 0.6939,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.8941,
+            "recall": 0.8736,
+            "f1": 0.8837,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            69,
+            10,
+            8
+          ],
+          [
+            2,
+            17,
+            1
+          ],
+          [
+            9,
+            2,
+            76
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.8362,
+          "macro_f1_present_classes": 0.8342,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 0.9412,
+          "macro_f1_present_classes": 0.9697,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.8033,
+          "macro_f1_present_classes": 0.5481,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.8049,
+          "macro_f1_present_classes": 0.7838,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.9,
+          "macro_f1_present_classes": 0.8803,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.8571,
+          "macro_f1_present_classes": 0.6296,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 0.7925,
+          "macro_f1_present_classes": 0.6376,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.7586,
+          "macro_f1_present_classes": 0.7659,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.0008,
+      "train_time_sec": 220.699,
+      "inference_ms_per_img": 30.13,
+      "model_size_mb": 0.398,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss_aug": 1.0148,
+          "train_loss": 0.9428,
+          "val_loss": 0.975,
+          "train_acc": 0.6006,
+          "val_acc": 0.6026,
+          "train_macro_f1": 0.5563,
+          "val_macro_f1": 0.5236
+        },
+        {
+          "epoch": 2,
+          "train_loss_aug": 0.8658,
+          "train_loss": 0.8866,
+          "val_loss": 0.9322,
+          "train_acc": 0.6602,
+          "val_acc": 0.609,
+          "train_macro_f1": 0.6262,
+          "val_macro_f1": 0.5579
+        },
+        {
+          "epoch": 3,
+          "train_loss_aug": 0.7791,
+          "train_loss": 0.8183,
+          "val_loss": 0.8634,
+          "train_acc": 0.6795,
+          "val_acc": 0.6731,
+          "train_macro_f1": 0.6426,
+          "val_macro_f1": 0.6329
+        },
+        {
+          "epoch": 4,
+          "train_loss_aug": 0.7638,
+          "train_loss": 0.6978,
+          "val_loss": 0.6803,
+          "train_acc": 0.723,
+          "val_acc": 0.7628,
+          "train_macro_f1": 0.6872,
+          "val_macro_f1": 0.7298
+        },
+        {
+          "epoch": 5,
+          "train_loss_aug": 0.7082,
+          "train_loss": 0.6832,
+          "val_loss": 0.6805,
+          "train_acc": 0.7456,
+          "val_acc": 0.7564,
+          "train_macro_f1": 0.7139,
+          "val_macro_f1": 0.7239
+        },
+        {
+          "epoch": 6,
+          "train_loss_aug": 0.6713,
+          "train_loss": 0.6403,
+          "val_loss": 0.618,
+          "train_acc": 0.7585,
+          "val_acc": 0.7821,
+          "train_macro_f1": 0.725,
+          "val_macro_f1": 0.7303
+        },
+        {
+          "epoch": 7,
+          "train_loss_aug": 0.6277,
+          "train_loss": 0.8023,
+          "val_loss": 0.8215,
+          "train_acc": 0.6747,
+          "val_acc": 0.6923,
+          "train_macro_f1": 0.6408,
+          "val_macro_f1": 0.6484
+        },
+        {
+          "epoch": 8,
+          "train_loss_aug": 0.6317,
+          "train_loss": 0.7077,
+          "val_loss": 0.7017,
+          "train_acc": 0.7504,
+          "val_acc": 0.7885,
+          "train_macro_f1": 0.6851,
+          "val_macro_f1": 0.6929
+        },
+        {
+          "epoch": 9,
+          "train_loss_aug": 0.6195,
+          "train_loss": 0.6081,
+          "val_loss": 0.6127,
+          "train_acc": 0.7617,
+          "val_acc": 0.7564,
+          "train_macro_f1": 0.7319,
+          "val_macro_f1": 0.7238
+        },
+        {
+          "epoch": 10,
+          "train_loss_aug": 0.6067,
+          "train_loss": 0.5935,
+          "val_loss": 0.5547,
+          "train_acc": 0.7649,
+          "val_acc": 0.7949,
+          "train_macro_f1": 0.7268,
+          "val_macro_f1": 0.7653
+        },
+        {
+          "epoch": 11,
+          "train_loss_aug": 0.5819,
+          "train_loss": 0.5185,
+          "val_loss": 0.4887,
+          "train_acc": 0.8325,
+          "val_acc": 0.8397,
+          "train_macro_f1": 0.8027,
+          "val_macro_f1": 0.815
+        },
+        {
+          "epoch": 12,
+          "train_loss_aug": 0.5646,
+          "train_loss": 0.6749,
+          "val_loss": 0.6924,
+          "train_acc": 0.7262,
+          "val_acc": 0.7372,
+          "train_macro_f1": 0.6902,
+          "val_macro_f1": 0.699
+        },
+        {
+          "epoch": 13,
+          "train_loss_aug": 0.5582,
+          "train_loss": 0.5469,
+          "val_loss": 0.5693,
+          "train_acc": 0.7874,
+          "val_acc": 0.7949,
+          "train_macro_f1": 0.7732,
+          "val_macro_f1": 0.7823
+        },
+        {
+          "epoch": 14,
+          "train_loss_aug": 0.5515,
+          "train_loss": 0.5325,
+          "val_loss": 0.5217,
+          "train_acc": 0.8035,
+          "val_acc": 0.8077,
+          "train_macro_f1": 0.7724,
+          "val_macro_f1": 0.7784
+        },
+        {
+          "epoch": 15,
+          "train_loss_aug": 0.5792,
+          "train_loss": 0.4938,
+          "val_loss": 0.4785,
+          "train_acc": 0.839,
+          "val_acc": 0.8205,
+          "train_macro_f1": 0.8087,
+          "val_macro_f1": 0.7865
+        },
+        {
+          "epoch": 16,
+          "train_loss_aug": 0.5266,
+          "train_loss": 0.4976,
+          "val_loss": 0.4959,
+          "train_acc": 0.8213,
+          "val_acc": 0.8333,
+          "train_macro_f1": 0.7869,
+          "val_macro_f1": 0.7984
+        },
+        {
+          "epoch": 17,
+          "train_loss_aug": 0.5296,
+          "train_loss": 0.4639,
+          "val_loss": 0.44,
+          "train_acc": 0.8309,
+          "val_acc": 0.8526,
+          "train_macro_f1": 0.8021,
+          "val_macro_f1": 0.8342
+        },
+        {
+          "epoch": 18,
+          "train_loss_aug": 0.5244,
+          "train_loss": 0.4877,
+          "val_loss": 0.4896,
+          "train_acc": 0.8261,
+          "val_acc": 0.8397,
+          "train_macro_f1": 0.8004,
+          "val_macro_f1": 0.8104
+        },
+        {
+          "epoch": 19,
+          "train_loss_aug": 0.5239,
+          "train_loss": 0.5175,
+          "val_loss": 0.5421,
+          "train_acc": 0.8245,
+          "val_acc": 0.8269,
+          "train_macro_f1": 0.7858,
+          "val_macro_f1": 0.7901
+        },
+        {
+          "epoch": 20,
+          "train_loss_aug": 0.4993,
+          "train_loss": 0.4502,
+          "val_loss": 0.446,
+          "train_acc": 0.8502,
+          "val_acc": 0.8333,
+          "train_macro_f1": 0.8261,
+          "val_macro_f1": 0.7949
+        },
+        {
+          "epoch": 21,
+          "train_loss_aug": 0.491,
+          "train_loss": 0.4543,
+          "val_loss": 0.4507,
+          "train_acc": 0.8341,
+          "val_acc": 0.8462,
+          "train_macro_f1": 0.8056,
+          "val_macro_f1": 0.8117
+        },
+        {
+          "epoch": 22,
+          "train_loss_aug": 0.4859,
+          "train_loss": 0.4578,
+          "val_loss": 0.4614,
+          "train_acc": 0.847,
+          "val_acc": 0.8526,
+          "train_macro_f1": 0.821,
+          "val_macro_f1": 0.8166
+        }
+      ]
+    },
+    "MobileNetV2 (Transfer)": {
+      "family": "deep_learning",
+      "arch_name": "mobilenet_v2",
+      "image_size": 224,
+      "best_epoch": 8,
+      "best_params": {
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "batch_size": 32,
+        "epochs_ran": 13
+      },
+      "tuning_trials": [
+        {
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "val_macro_f1": 0.9013148941960946,
+          "best_epoch": 8
+        },
+        {
+          "lr": 0.0003,
+          "weight_decay": 0.0005,
+          "val_macro_f1": 0.8967508055853921,
+          "best_epoch": 8
+        }
+      ],
+      "params_info": {
+        "total_params": 2388227,
+        "trainable_params": 164355
+      },
+      "train_macro_f1": 0.9466,
+      "val_metrics": {
+        "n": 156,
+        "accuracy": 0.9103,
+        "balanced_accuracy": 0.9012,
+        "macro_f1": 0.9013,
+        "weighted_f1": 0.9104,
+        "per_class": {
+          "Buena": {
+            "precision": 0.8889,
+            "recall": 0.9143,
+            "f1": 0.9014,
+            "support": 70
+          },
+          "Regular": {
+            "precision": 0.875,
+            "recall": 0.875,
+            "f1": 0.875,
+            "support": 16
+          },
+          "Mala": {
+            "precision": 0.9412,
+            "recall": 0.9143,
+            "f1": 0.9275,
+            "support": 70
+          }
+        },
+        "confusion_matrix": [
+          [
+            64,
+            2,
+            4
+          ],
+          [
+            2,
+            14,
+            0
+          ],
+          [
+            6,
+            0,
+            64
+          ]
+        ]
+      },
+      "test_metrics": {
+        "n": 194,
+        "accuracy": 0.9433,
+        "balanced_accuracy": 0.9322,
+        "macro_f1": 0.9382,
+        "weighted_f1": 0.9435,
+        "per_class": {
+          "Buena": {
+            "precision": 0.9043,
+            "recall": 0.977,
+            "f1": 0.9392,
+            "support": 87
+          },
+          "Regular": {
+            "precision": 0.9474,
+            "recall": 0.9,
+            "f1": 0.9231,
+            "support": 20
+          },
+          "Mala": {
+            "precision": 0.9877,
+            "recall": 0.9195,
+            "f1": 0.9524,
+            "support": 87
+          }
+        },
+        "confusion_matrix": [
+          [
+            85,
+            1,
+            1
+          ],
+          [
+            2,
+            18,
+            0
+          ],
+          [
+            7,
+            0,
+            80
+          ]
+        ]
+      },
+      "test_by_source": {
+        "FruitNet_Kaggle": {
+          "n": 116,
+          "accuracy": 0.9741,
+          "macro_f1_present_classes": 0.97,
+          "present_classes": [
+            "Buena",
+            "Mala"
+          ]
+        },
+        "FruitNet_Mixed_Segmentada": {
+          "n": 17,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Regular"
+          ]
+        },
+        "Propia": {
+          "n": 61,
+          "accuracy": 0.8689,
+          "macro_f1_present_classes": 0.5901,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        }
+      },
+      "test_by_species": {
+        "banano": {
+          "n": 41,
+          "accuracy": 0.9512,
+          "macro_f1_present_classes": 0.963,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "limon": {
+          "n": 50,
+          "accuracy": 0.96,
+          "macro_f1_present_classes": 0.9519,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "mango": {
+          "n": 7,
+          "accuracy": 0.7143,
+          "macro_f1_present_classes": 0.5833,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "manzana": {
+          "n": 53,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "naranja": {
+          "n": 29,
+          "accuracy": 0.8276,
+          "macro_f1_present_classes": 0.8242,
+          "present_classes": [
+            "Buena",
+            "Regular",
+            "Mala"
+          ]
+        },
+        "tomate_arbol": {
+          "n": 14,
+          "accuracy": 1.0,
+          "macro_f1_present_classes": 1.0,
+          "present_classes": [
+            "Buena"
+          ]
+        }
+      },
+      "overfitting_gap": 0.0084,
+      "train_time_sec": 352.355,
+      "inference_ms_per_img": 35.44,
+      "model_size_mb": 9.34,
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss_aug": 0.8791,
+          "train_loss": 0.6448,
+          "val_loss": 0.6535,
+          "train_acc": 0.847,
+          "val_acc": 0.8654,
+          "train_macro_f1": 0.8398,
+          "val_macro_f1": 0.8541
+        },
+        {
+          "epoch": 2,
+          "train_loss_aug": 0.4933,
+          "train_loss": 0.4482,
+          "val_loss": 0.4697,
+          "train_acc": 0.9018,
+          "val_acc": 0.8846,
+          "train_macro_f1": 0.8862,
+          "val_macro_f1": 0.8633
+        },
+        {
+          "epoch": 3,
+          "train_loss_aug": 0.3709,
+          "train_loss": 0.3418,
+          "val_loss": 0.4105,
+          "train_acc": 0.913,
+          "val_acc": 0.9038,
+          "train_macro_f1": 0.9073,
+          "val_macro_f1": 0.8964
+        },
+        {
+          "epoch": 4,
+          "train_loss_aug": 0.3114,
+          "train_loss": 0.316,
+          "val_loss": 0.3967,
+          "train_acc": 0.9082,
+          "val_acc": 0.891,
+          "train_macro_f1": 0.9077,
+          "val_macro_f1": 0.8803
+        },
+        {
+          "epoch": 5,
+          "train_loss_aug": 0.2574,
+          "train_loss": 0.2664,
+          "val_loss": 0.3688,
+          "train_acc": 0.9179,
+          "val_acc": 0.8782,
+          "train_macro_f1": 0.9114,
+          "val_macro_f1": 0.8647
+        },
+        {
+          "epoch": 6,
+          "train_loss_aug": 0.2446,
+          "train_loss": 0.2542,
+          "val_loss": 0.3748,
+          "train_acc": 0.9179,
+          "val_acc": 0.8846,
+          "train_macro_f1": 0.9243,
+          "val_macro_f1": 0.8818
+        },
+        {
+          "epoch": 7,
+          "train_loss_aug": 0.2137,
+          "train_loss": 0.1904,
+          "val_loss": 0.3012,
+          "train_acc": 0.9581,
+          "val_acc": 0.8974,
+          "train_macro_f1": 0.9552,
+          "val_macro_f1": 0.8917
+        },
+        {
+          "epoch": 8,
+          "train_loss_aug": 0.1959,
+          "train_loss": 0.1788,
+          "val_loss": 0.3056,
+          "train_acc": 0.9501,
+          "val_acc": 0.9103,
+          "train_macro_f1": 0.9466,
+          "val_macro_f1": 0.9013
+        },
+        {
+          "epoch": 9,
+          "train_loss_aug": 0.2015,
+          "train_loss": 0.1785,
+          "val_loss": 0.2927,
+          "train_acc": 0.9565,
+          "val_acc": 0.8974,
+          "train_macro_f1": 0.954,
+          "val_macro_f1": 0.8852
+        },
+        {
+          "epoch": 10,
+          "train_loss_aug": 0.1833,
+          "train_loss": 0.1692,
+          "val_loss": 0.2966,
+          "train_acc": 0.9517,
+          "val_acc": 0.9038,
+          "train_macro_f1": 0.9502,
+          "val_macro_f1": 0.8966
+        },
+        {
+          "epoch": 11,
+          "train_loss_aug": 0.1579,
+          "train_loss": 0.1621,
+          "val_loss": 0.2923,
+          "train_acc": 0.9565,
+          "val_acc": 0.9038,
+          "train_macro_f1": 0.9577,
+          "val_macro_f1": 0.8966
+        },
+        {
+          "epoch": 12,
+          "train_loss_aug": 0.1776,
+          "train_loss": 0.1518,
+          "val_loss": 0.2825,
+          "train_acc": 0.963,
+          "val_acc": 0.9038,
+          "train_macro_f1": 0.9625,
+          "val_macro_f1": 0.8966
+        },
+        {
+          "epoch": 13,
+          "train_loss_aug": 0.1681,
+          "train_loss": 0.1512,
+          "val_loss": 0.2739,
+          "train_acc": 0.9662,
+          "val_acc": 0.9167,
+          "train_macro_f1": 0.9651,
+          "val_macro_f1": 0.8993
+        }
+      ]
+    }
+  },
+  "size_evaluation": {
+    "formula": "max(bbox_width, bbox_height) / max(image_width, image_height)",
+    "rotation_invariant": true,
+    "references_total": 204,
+    "references_evaluated": 204,
+    "references_failed": 0,
+    "coverage_rate": 1.0,
+    "mae": 0.01244,
+    "median_ae": 0.00601,
+    "rmse": 0.01918,
+    "per_species": {
+      "limon": {
+        "n": 45,
+        "mae": 0.01723,
+        "median_ae": 0.00955,
+        "rmse": 0.02411
+      },
+      "mango": {
+        "n": 43,
+        "mae": 0.00841,
+        "median_ae": 0.00426,
+        "rmse": 0.01269
+      },
+      "naranja": {
+        "n": 64,
+        "mae": 0.01569,
+        "median_ae": 0.00763,
+        "rmse": 0.0236
+      },
+      "tomate_arbol": {
+        "n": 52,
+        "mae": 0.00763,
+        "median_ae": 0.00464,
+        "rmse": 0.01103
+      }
+    },
+    "combined_dataset_coverage": {
+      "FruitNet_Kaggle": {
+        "total": 580,
+        "ok": 580,
+        "failed": 0,
+        "touches_border": 419
+      },
+      "FruitNet_Mixed_Segmentada": {
+        "total": 84,
+        "ok": 82,
+        "failed": 2,
+        "touches_border": 75
+      },
+      "Propia": {
+        "total": 307,
+        "ok": 307,
+        "failed": 0,
+        "touches_border": 27
+      }
+    }
+  }
+}
